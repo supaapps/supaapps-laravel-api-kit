@@ -24,10 +24,10 @@ class ObserversProvider extends ServiceProvider
      */
     public function boot()
     {
-        foreach(config('supalara.log_actions_for_models') as $model) {
+        foreach(config('supalara.audit.log_actions_for_models') as $model) {
             $model::observe(AuditObserver::class);
         }
-        foreach(config('supalara.add_user_id_for_models') as $model) {
+        foreach(config('supalara.audit.add_user_id_for_models') as $model) {
             $model::observe(AuditObserver::class);
         }
     }
