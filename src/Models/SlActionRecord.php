@@ -11,7 +11,7 @@ class SlActionRecord extends BaseModel
 
     protected $fillable = [
         'created_by',
-        'action_type_id',
+        'sl_action_type_id',
         'payload',
         'model',
     ];

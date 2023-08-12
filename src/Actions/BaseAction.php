@@ -24,7 +24,7 @@ abstract class BaseAction implements ActionInterface
     public function save(): SlActionRecord
     {
         return SlActionRecord::create([
-           'action_type_id' => $this->getActionId(),
+           'sl_action_type_id' => $this->getActionId(),
            'payload' => $this->jsonSerialize(),
            'model' => $this->modelName,
         ]);
