@@ -5,7 +5,7 @@ namespace Supaapps\Supalara\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class SetupController
+class BaseSetupController extends Controller
 {
     public $usersModel = '\App\User';
 
