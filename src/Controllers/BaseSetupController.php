@@ -17,10 +17,12 @@ class BaseSetupController extends Controller
             abort(403, 'Forbidden');
         }
 
-        return $this->usersModel::create([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password')),
-        ]);
+        $user = new $this->usersModel();
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        $user->password = Hash::make($request->get('password'));
+        $user->save();
+
+        return $user;
     }
 }
