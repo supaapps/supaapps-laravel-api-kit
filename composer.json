@@ -1,0 +1,19 @@
+{
+    "name": "supaapps/supalara",
+    "description": "Boilerplate & Helpers for Supaapps Laravel projects",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Supaapps\\Supalara\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Supaapps GmbH",
+            "email": "opensource@supaapps.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
