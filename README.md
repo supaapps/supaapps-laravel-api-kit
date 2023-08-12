@@ -3,4 +3,9 @@
 Boilerplates and helpers for Supaapps Laravel projects
 
 # Todo
-[ ] Add Basic CRUD functions
+[X] Add Basic CRUD functions
+[X] Add Basic audit & observers
+[ ] Tests for Crud
+[ ] Tests for Audit
+[ ] Publish Dockerfile
+
