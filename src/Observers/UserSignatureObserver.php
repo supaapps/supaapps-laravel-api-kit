@@ -2,7 +2,6 @@
 
 namespace Supaapps\Supalara\Observers;
 
-use Illuminate\Support\Facades\DB;
 
 class UserSignatureObserver
 {
@@ -20,10 +19,11 @@ class UserSignatureObserver
      */
     public function creating($model)
     {
-        if (defined('USER_ID')) {
-            $model->created_by_id = USER_ID;
-            $model->updated_by_id = USER_ID;
-        }
+        // auth()->id() will return current logged in user id
+        // based on request route auth middleware
+        // @see https://github.com/laravel/framework/blob/10.x/src/Illuminate/Foundation/helpers.php#L158
+        $model->created_by_id = auth()->id();
+        $model->updated_by_id = auth()->id();
     }
 
 
@@ -33,8 +33,6 @@ class UserSignatureObserver
      */
     public function updating($model)
     {
-        if (defined('USER_ID')) {
-            $model->updated_by_id = USER_ID;
-        }
+        $model->updated_by_id = auth()->id();
     }
 }
