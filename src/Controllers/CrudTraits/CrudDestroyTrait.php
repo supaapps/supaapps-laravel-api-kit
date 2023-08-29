@@ -2,9 +2,6 @@
 
 namespace Supaapps\Supalara\Controllers\CrudTraits;
 
-use function Supaapps\Supalara\Controllers\CrudTraits\CrudTraits\abort;
-use function Supaapps\Supalara\Controllers\CrudTraits\CrudTraits\response;
-
 trait CrudDestroyTrait
 {
     public function destroy($id)
