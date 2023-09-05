@@ -16,23 +16,24 @@ trait CrudIndexTrait
         }
 
         // SEARCH BY MULTIPLE FIELDS -----------
-        if (!empty($this->searchFields) && $request->has('search')) {
-            $query->where(function ($q) use ($request) {
-                foreach ($this->searchFields as $field) {
+        $searchFields = $this->getSearchFields();
+        if (!empty($searchFields) && $request->has('search')) {
+            $query->where(function ($q) use ($request, $searchFields) {
+                foreach ($searchFields as $field) {
                     $q->orWhere($field, 'LIKE', '%' . $request->get('search') . '%');
                 }
             });
         }
 
         // FILTER BY COLUMNS -------------------
-        foreach ($this->filters as $key) {
+        foreach ($this->getFilters() as $key) {
             if ($request->has($key)) {
                 $query->whereIn(Str::singular($key), $request->get($key));
             }
         }
 
         // FILTER BY DATES ---------------------
-        foreach ($this->dateFilters as $key) {
+        foreach ($this->getDateFilters() as $key) {
             if (is_string($request->get("{$key}_min"))) {
                 $query->whereDate($key, '>=', $request->get("{$key}_min"));
             }
