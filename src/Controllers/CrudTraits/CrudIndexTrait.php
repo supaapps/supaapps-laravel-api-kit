@@ -16,7 +16,7 @@ trait CrudIndexTrait
         }
 
         // SEARCH BY MULTIPLE FIELDS -----------
-        if ($request->has('search') && is_array($this->searchFields)) {
+        if (!empty($this->searchFields) && $request->has('search')) {
             $query->where(function ($q) use ($request) {
                 foreach ($this->searchFields as $field) {
                     $q->orWhere($field, 'LIKE', '%' . $request->get('search') . '%');
@@ -39,6 +39,21 @@ trait CrudIndexTrait
 
             if (is_string($request->get("{$key}_max"))) {
                 $query->whereDate($key, '<=', $request->get("{$key}_max"));
+            }
+        }
+
+        // SORT COLUMNS ------------------------
+        if (!empty($this->searchFields) && $request->has('sort')) {
+            foreach ($request->get('sort') as $value) {
+                $value = explode(",", $value);
+                $column = $value[0];
+                $dir = $value[1] ?? 'asc';
+
+                if (!in_array($column, $this->searchFields)) {
+                    continue;
+                }
+
+                $query->orderBy($column, $dir);
             }
         }
 
