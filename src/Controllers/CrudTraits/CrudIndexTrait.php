@@ -43,13 +43,14 @@ trait CrudIndexTrait
         }
 
         // SORT COLUMNS ------------------------
-        if (!empty($this->searchFields) && $request->has('sort')) {
+        $availableSortColumns = $this->getSortColumns();
+        if (!empty($availableSortColumns) && $request->has('sort')) {
             foreach ($request->get('sort') as $value) {
                 $value = explode(",", $value);
                 $column = $value[0];
                 $dir = $value[1] ?? 'asc';
 
-                if (!in_array($column, $this->searchFields)) {
+                if (!in_array($column, $availableSortColumns)) {
                     continue;
                 }
 

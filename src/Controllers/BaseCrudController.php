@@ -10,7 +10,24 @@ class BaseCrudController extends Controller
     public bool $isDeletable = false;
     public bool $readOnly = false;
     public ?string $searchField = null;
-    public array $searchFields = [];
-    public array $filters = [];
-    public array $dateFilters = [];
+
+    protected function getSearchFields(): array
+    {
+        return [];
+    }
+
+    protected function getFilters(): array
+    {
+        return [];
+    }
+
+    protected function getDateFilters(): array
+    {
+        return [];
+    }
+
+    protected function getSortColumns(): array
+    {
+        return $this->getSearchFields();
+    }
 }
