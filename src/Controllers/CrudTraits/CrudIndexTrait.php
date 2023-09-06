@@ -68,17 +68,17 @@ trait CrudIndexTrait
 
     private function getSearchFields(): array
     {
-        return [];
+        return $this->searchFields;
     }
 
     private function getFilters(): array
     {
-        return [];
+        return $this->filters;
     }
 
     private function getDateFilters(): array
     {
-        return [];
+        return $this->dateFilters;
     }
 
     private function getSortColumns(): array
