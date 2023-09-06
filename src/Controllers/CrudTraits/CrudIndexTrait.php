@@ -65,4 +65,24 @@ trait CrudIndexTrait
             return $query->get();
         }
     }
+
+    private function getSearchFields(): array
+    {
+        return [];
+    }
+
+    private function getFilters(): array
+    {
+        return [];
+    }
+
+    private function getDateFilters(): array
+    {
+        return [];
+    }
+
+    private function getSortColumns(): array
+    {
+        return $this->getSearchFields();
+    }
 }
