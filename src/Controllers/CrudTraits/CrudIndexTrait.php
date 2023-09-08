@@ -45,8 +45,10 @@ trait CrudIndexTrait
 
         // SORT COLUMNS ------------------------
         $availableSortColumns = $this->getSortColumns();
-        if (!empty($availableSortColumns) && $request->has('sort')) {
-            foreach ($request->get('sort') as $value) {
+        $sortQuery = $request->get('sort', ['created_at,desc']);
+
+        if (!empty($availableSortColumns) && is_array($sortQuery)) {
+            foreach ($sortQuery as $value) {
                 $value = explode(",", $value);
                 $column = $value[0];
                 $dir = $value[1] ?? 'asc';
