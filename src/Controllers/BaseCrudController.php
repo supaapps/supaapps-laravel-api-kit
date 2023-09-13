@@ -62,8 +62,9 @@ class BaseCrudController extends Controller
 
     /**
      * Default order by column when sorting query is not existing
+     * ex: ['created_at,desc']
      *
-     * @var string|null
+     * @var array|null
      */
-    public ?string $defaultOrderByColumn = null;
+    public ?array $defaultOrderByColumns = null;
 }
