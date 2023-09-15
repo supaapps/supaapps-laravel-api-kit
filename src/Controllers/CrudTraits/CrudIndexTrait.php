@@ -44,9 +44,11 @@ trait CrudIndexTrait
         }
 
         // SORT COLUMNS ------------------------
-        $availableSortColumns = $this->getSortColumns();
-        if (!empty($availableSortColumns) && $request->has('sort')) {
-            foreach ($request->get('sort') as $value) {
+        $availableSortColumns = $this->getOrderByColumns();
+        $sortQuery = $request->get('sort', $this->getDefaultOrderByColumns());
+
+        if (!empty($availableSortColumns) && is_array($sortQuery)) {
+            foreach ($sortQuery as $value) {
                 $value = explode(",", $value);
                 $column = $value[0];
                 $dir = $value[1] ?? 'asc';
@@ -81,8 +83,13 @@ trait CrudIndexTrait
         return $this->dateFilters;
     }
 
-    private function getSortColumns(): array
+    private function getOrderByColumns(): array
     {
         return $this->getSearchFields();
+    }
+
+    private function getDefaultOrderByColumns(): ?array
+    {
+        return $this->defaultOrderByColumns;
     }
 }
