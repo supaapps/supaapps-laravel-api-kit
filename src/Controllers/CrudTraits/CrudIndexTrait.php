@@ -54,13 +54,24 @@ trait CrudIndexTrait
             }
         }
 
+        // FILTER NULL OR NOT NULL -------------
+        if (!empty($request->get('is_empty'))) {
+            foreach ($this->getIsEmptyFilters() as $column) {
+                $query->whereNull(
+                    $column,
+                    'and',
+                    !$request->boolean("is_empty.{$column}")
+                );
+            }
+        }
+
         // SORT COLUMNS ------------------------
         $availableSortColumns = $this->getOrderByColumns();
         $sortQuery = $request->get('sort', $this->getDefaultOrderByColumns());
 
         if (!empty($availableSortColumns) && is_array($sortQuery)) {
             foreach ($sortQuery as $value) {
-                $value = explode(",", $value);
+                $value = explode(',', $value);
                 $column = $value[0];
                 $dir = $value[1] ?? 'asc';
 
@@ -102,6 +113,11 @@ trait CrudIndexTrait
     private function getDateFilters(): array
     {
         return $this->dateFilters;
+    }
+
+    private function getIsEmptyFilters(): array
+    {
+        return $this->isEmptyFilters;
     }
 
     private function getOrderByColumns(): array

@@ -75,6 +75,13 @@ class BaseCrudController extends Controller
     public array $dateFilters = [];
 
     /**
+     * Filter columns that is null or not null
+     *
+     * @var array|null
+     */
+    public ?array $isEmptyFilters = [];
+
+    /**
      * Default order by column when sorting query is not existing
      * ex: ['created_at,desc']
      *
