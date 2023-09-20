@@ -4,6 +4,8 @@ namespace Supaapps\Supalara\Controllers\CrudTraits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Supaapps\Supalara\Enums\Operator;
+use Supaapps\Supalara\Exceptions\OperatorIsNotDefined;
 
 trait CrudIndexTrait
 {
@@ -19,8 +21,21 @@ trait CrudIndexTrait
         $searchFields = $this->getSearchFields();
         if (!empty($searchFields) && $request->has('search')) {
             $query->where(function ($q) use ($request, $searchFields) {
-                foreach ($searchFields as $field) {
-                    $q->orWhere($field, 'LIKE', '%' . $request->get('search') . '%');
+                foreach ($searchFields as $field => $operator) {
+                    switch ($operator) {
+                        case Operator::LIKE:
+                            $q->orWhere($field, 'LIKE', '%' . $request->get('search') . '%');
+                            break;
+                        case Operator::DATE:
+                            $q->orWhereDate($field, $request->get('search'));
+                            break;
+                        case Operator::EQUAL:
+                            $q->orWhere($field, $request->get('search'));
+                            break;
+                        default:
+                            throw new OperatorIsNotDefined("{$operator} is unknown operator");
+                            break;
+                    }
                 }
             });
         }
