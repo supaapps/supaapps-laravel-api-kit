@@ -4,8 +4,6 @@ namespace Supaapps\Supalara\Controllers\CrudTraits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Supaapps\Supalara\Enums\Operator;
-use Supaapps\Supalara\Exceptions\OperatorIsNotDefined;
 
 trait CrudIndexTrait
 {
@@ -17,28 +15,26 @@ trait CrudIndexTrait
             $query->where($this->searchField, 'LIKE', '%' . $request->get('search') . '%');
         }
 
-        // SEARCH BY MULTIPLE FIELDS -----------
-        $searchFields = $this->getSearchFields();
-        if (!empty($searchFields) && $request->has('search')) {
-            $query->where(function ($q) use ($request, $searchFields) {
-                foreach ($searchFields as $field => $operator) {
-                    switch ($operator) {
-                        case Operator::LIKE:
-                            $q->orWhere($field, 'LIKE', '%' . $request->get('search') . '%');
-                            break;
-                        case Operator::DATE:
-                            $q->orWhereDate($field, $request->get('search'));
-                            break;
-                        case Operator::EQUAL:
-                            $q->orWhere($field, $request->get('search'));
-                            break;
-                        default:
-                            throw new OperatorIsNotDefined("{$operator} is unknown operator");
-                            break;
-                    }
+        // SEARCH BY COLUMN TYPES --------------
+        $query->where(function ($query) use ($request) {
+            if (!empty($this->getStringSearchFields()) && $request->has('search')) {
+                foreach ($this->getStringSearchFields() as $field) {
+                    $query->orWhere($field, 'LIKE', '%' . $request->get('search') . '%');
                 }
-            });
-        }
+            }
+
+            if (!empty($this->getIntegerSearchFields()) && $request->has('search')) {
+                foreach ($this->getIntegerSearchFields() as $field) {
+                    $query->orWhere($field, $request->get('search'));
+                }
+            }
+
+            if (!empty($this->getDateSearchFields()) && $request->has('search')) {
+                foreach ($this->getDateSearchFields() as $field) {
+                    $query->orWhereDate($field, $request->get('search'));
+                }
+            }
+        });
 
         // FILTER BY COLUMNS -------------------
         foreach ($this->getFilters() as $key) {
@@ -83,9 +79,19 @@ trait CrudIndexTrait
         }
     }
 
-    private function getSearchFields(): array
+    private function getStringSearchFields(): array
     {
-        return $this->searchFields;
+        return $this->stringSearchFields;
+    }
+
+    private function getIntegerSearchFields(): array
+    {
+        return $this->integerSearchFields;
+    }
+
+    private function getDateSearchFields(): array
+    {
+        return $this->dateSearchFields;
     }
 
     private function getFilters(): array
@@ -100,7 +106,11 @@ trait CrudIndexTrait
 
     private function getOrderByColumns(): array
     {
-        return $this->getSearchFields();
+        return array_merge(
+            $this->getStringSearchFields(),
+            $this->getIntegerSearchFields(),
+            $this->getDateSearchFields(),
+        );
     }
 
     private function getDefaultOrderByColumns(): ?array
