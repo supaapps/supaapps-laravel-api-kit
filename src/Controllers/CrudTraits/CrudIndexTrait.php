@@ -17,20 +17,20 @@ trait CrudIndexTrait
 
         // SEARCH BY COLUMN TYPES --------------
         $query->where(function ($query) use ($request) {
-            if (!empty($this->getStringSearchFields()) && $request->has('search')) {
-                foreach ($this->getStringSearchFields() as $field) {
+            if (!empty($this->getSearchSimilarFields()) && $request->has('search')) {
+                foreach ($this->getSearchSimilarFields() as $field) {
                     $query->orWhere($field, 'LIKE', '%' . $request->get('search') . '%');
                 }
             }
 
-            if (!empty($this->getIntegerSearchFields()) && $request->has('search')) {
-                foreach ($this->getIntegerSearchFields() as $field) {
+            if (!empty($this->getSearchExactFields()) && $request->has('search')) {
+                foreach ($this->getSearchExactFields() as $field) {
                     $query->orWhere($field, $request->get('search'));
                 }
             }
 
-            if (!empty($this->getDateSearchFields()) && $request->has('search')) {
-                foreach ($this->getDateSearchFields() as $field) {
+            if (!empty($this->getSearchDateFields()) && $request->has('search')) {
+                foreach ($this->getSearchDateFields() as $field) {
                     $query->orWhereDate($field, $request->get('search'));
                 }
             }
@@ -90,19 +90,19 @@ trait CrudIndexTrait
         }
     }
 
-    private function getStringSearchFields(): array
+    private function getSearchSimilarFields(): array
     {
-        return $this->stringSearchFields;
+        return $this->searchSimilarFields;
     }
 
-    private function getIntegerSearchFields(): array
+    private function getSearchExactFields(): array
     {
-        return $this->integerSearchFields;
+        return $this->searchExactFields;
     }
 
-    private function getDateSearchFields(): array
+    private function getSearchDateFields(): array
     {
-        return $this->dateSearchFields;
+        return $this->searchDateFields;
     }
 
     private function getFilters(): array
@@ -123,9 +123,9 @@ trait CrudIndexTrait
     private function getOrderByColumns(): array
     {
         return array_merge(
-            $this->getStringSearchFields(),
-            $this->getIntegerSearchFields(),
-            $this->getDateSearchFields(),
+            $this->getSearchSimilarFields(),
+            $this->getSearchExactFields(),
+            $this->getSearchDateFields(),
         );
     }
 

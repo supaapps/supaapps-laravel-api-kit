@@ -40,25 +40,25 @@ class BaseCrudController extends Controller
     public ?string $searchField = null;
 
     /**
-     * Search by string columns
+     * Search columns using "LIKE" operator
      *
      * @var array
      */
-    public array $stringSearchFields = [];
+    public array $searchSimilarFields = [];
 
     /**
-     * Search by integer columns
+     * Search columns using "=" operator
      *
      * @var array
      */
-    public array $integerSearchFields = [];
+    public array $searchExactFields = [];
 
     /**
      * Search by date columns
      *
      * @var array
      */
-    public array $dateSearchFields = [];
+    public array $searchDateFields = [];
 
     /**
      * Filter by columns
