@@ -15,15 +15,26 @@ trait CrudIndexTrait
             $query->where($this->searchField, 'LIKE', '%' . $request->get('search') . '%');
         }
 
-        // SEARCH BY MULTIPLE FIELDS -----------
-        $searchFields = $this->getSearchFields();
-        if (!empty($searchFields) && $request->has('search')) {
-            $query->where(function ($q) use ($request, $searchFields) {
-                foreach ($searchFields as $field) {
-                    $q->orWhere($field, 'LIKE', '%' . $request->get('search') . '%');
+        // SEARCH BY COLUMN TYPES --------------
+        $query->where(function ($query) use ($request) {
+            if (!empty($this->getSearchSimilarFields()) && $request->has('search')) {
+                foreach ($this->getSearchSimilarFields() as $field) {
+                    $query->orWhere($field, 'LIKE', '%' . $request->get('search') . '%');
                 }
-            });
-        }
+            }
+
+            if (!empty($this->getSearchExactFields()) && $request->has('search')) {
+                foreach ($this->getSearchExactFields() as $field) {
+                    $query->orWhere($field, $request->get('search'));
+                }
+            }
+
+            if (!empty($this->getSearchDateFields()) && $request->has('search')) {
+                foreach ($this->getSearchDateFields() as $field) {
+                    $query->orWhereDate($field, $request->get('search'));
+                }
+            }
+        });
 
         // FILTER BY COLUMNS -------------------
         foreach ($this->getFilters() as $key) {
@@ -43,13 +54,24 @@ trait CrudIndexTrait
             }
         }
 
+        // FILTER NULL OR NOT NULL -------------
+        if (!empty($request->get('is_empty'))) {
+            foreach ($this->getIsEmptyFilters() as $column) {
+                $query->whereNull(
+                    $column,
+                    'and',
+                    !$request->boolean("is_empty.{$column}")
+                );
+            }
+        }
+
         // SORT COLUMNS ------------------------
         $availableSortColumns = $this->getOrderByColumns();
         $sortQuery = $request->get('sort', $this->getDefaultOrderByColumns());
 
         if (!empty($availableSortColumns) && is_array($sortQuery)) {
             foreach ($sortQuery as $value) {
-                $value = explode(",", $value);
+                $value = explode(',', $value);
                 $column = $value[0];
                 $dir = $value[1] ?? 'asc';
 
@@ -68,9 +90,19 @@ trait CrudIndexTrait
         }
     }
 
-    private function getSearchFields(): array
+    private function getSearchSimilarFields(): array
     {
-        return $this->searchFields;
+        return $this->searchSimilarFields;
+    }
+
+    private function getSearchExactFields(): array
+    {
+        return $this->searchExactFields;
+    }
+
+    private function getSearchDateFields(): array
+    {
+        return $this->searchDateFields;
     }
 
     private function getFilters(): array
@@ -83,9 +115,18 @@ trait CrudIndexTrait
         return $this->dateFilters;
     }
 
+    private function getIsEmptyFilters(): array
+    {
+        return $this->isEmptyFilters;
+    }
+
     private function getOrderByColumns(): array
     {
-        return $this->getSearchFields();
+        return array_merge(
+            $this->getSearchSimilarFields(),
+            $this->getSearchExactFields(),
+            $this->getSearchDateFields(),
+        );
     }
 
     private function getDefaultOrderByColumns(): ?array

@@ -40,11 +40,25 @@ class BaseCrudController extends Controller
     public ?string $searchField = null;
 
     /**
-     * Search by columns
+     * Search columns using "LIKE" operator
      *
      * @var array
      */
-    public array $searchFields = [];
+    public array $searchSimilarFields = [];
+
+    /**
+     * Search columns using "=" operator
+     *
+     * @var array
+     */
+    public array $searchExactFields = [];
+
+    /**
+     * Search by date columns
+     *
+     * @var array
+     */
+    public array $searchDateFields = [];
 
     /**
      * Filter by columns
@@ -59,6 +73,13 @@ class BaseCrudController extends Controller
      * @var array
      */
     public array $dateFilters = [];
+
+    /**
+     * Filter columns that is null or not null
+     *
+     * @var array|null
+     */
+    public ?array $isEmptyFilters = [];
 
     /**
      * Default order by column when sorting query is not existing
