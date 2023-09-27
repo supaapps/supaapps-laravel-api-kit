@@ -158,11 +158,39 @@ public array $dateFilters = [
 public ?array $isEmptyFilters = [];
 ```
 
+In the following example, user wants to get the completed and not cancelled rewards. These rewards have `completed_at IS NOT NULL` and `cancelled_at IS NULL`
+
+```php
+// user hit endpoint > /example?is_empty[completed_at]=false&is_empty[cancelled_at]=true
+
+public ?array $isEmptyFilters = [
+    'completed_at',
+    'cancelled_at',
+];
+```
+
 #### Define default order by column <!-- omit in toc -->
 
 ```php
 public ?array $defaultOrderByColumns = null;
 ```
+
+In the following example, there are 2 order by rules are defined in the controller. The results will be ordered by `created_at` descending and by `id` ascending.
+
+```php
+public ?array $defaultOrderByColumns = [
+    'created_at,desc',
+    'id,asc'
+];
+```
+
+But if the request has `sort` query parameter, then it will override the `defaultOrderByColumns`. **Example**:
+
+```css
+/sort?sort[id]=desc&sort[name]=asc
+```
+
+This will sort the results first by `id` descending then by `name` ascending
 
 ## Todo
 
