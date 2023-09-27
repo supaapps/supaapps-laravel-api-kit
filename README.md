@@ -8,6 +8,8 @@ Boilerplate and helpers for Supaapps Laravel projects
 - [Usage](#usage)
   - [CRUD](#crud)
   - [Available CRUD properties](#available-crud-properties)
+- [Overrides](#overrides)
+  - [CRUD Controller](#crud-controller)
 - [Todo](#todo)
 
 ## Installation
@@ -208,12 +210,21 @@ public ?array $defaultOrderByColumns = [
 
 But if the request has `sort` query parameter, then it will override the `defaultOrderByColumns`. **Example**:
 
-```css
+```js
 /sort?sort[id]=desc&sort[name]=asc
 ```
 
 This will sort the results first by `id` descending then by `name` ascending
 
+---
+
+## Overrides
+
+### CRUD Controller
+
+You can override properties in your controller using getters
+
+<!-- TODO -->
 ---
 
 ## Todo
