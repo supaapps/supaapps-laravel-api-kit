@@ -35,37 +35,47 @@ class ExampleController extends BaseCrudController
 
 There are multiple properties you can use within your CRUD controller:
 
-#### The model for CRUD operations. (**required**) <!-- omit in toc -->
+- The model for CRUD operations. (**required**)
 
 ```php
 public string $model = \App\Models\Example::class; // replace with your model
 ```
 
-#### Paginate the response from index response or not. (default = `false`) <!-- omit in toc -->
+<br/>
+
+- Paginate the response from index response or not. (default = `false`)
 
 ```php
 public bool $shouldPaginate = false;
 ```
 
-#### Enable deletion for the model. (default = `false`) <!-- omit in toc -->
+<br/>
+
+- Enable deletion for the model. (default = `false`)
 
 ```php
 public bool $isDeletable = false;
 ```
 
-#### Disable updates on the model. (default = `false`) <!-- omit in toc -->
+<br/>
+
+- Disable updates on the model. (default = `false`)
 
 ```php
 public bool $readOnly = false;
 ```
 
-#### Perform searches on the specified column using the `search` parameter from the request. <!-- omit in toc -->
+<br/>
+
+- Perform searches on the specified column using the `search` parameter from the request.
 
 ```php
 public ?string $searchField = null; // replace with desired column
 ```
 
-#### Perform a lookup for <u>similar</u> results in the specified columns using the **`LIKE` operator** with the `search` parameter from the request. <!-- omit in toc -->
+<br/>
+
+- Perform a lookup for <u>similar</u> results in the specified columns using the **`LIKE` operator** with the `search` parameter from the request.
 
 ```php
 public array $searchSimilarFields = [];
@@ -82,7 +92,9 @@ public array $searchSimilarFields = [
 ];
 ```
 
-#### Perform a lookup for <u>exact</u> results in the specified columns using the **`=` operator** with the `search` parameter from the request. <!-- omit in toc -->
+<br/>
+
+- Perform a lookup for <u>exact</u> results in the specified columns using the **`=` operator** with the `search` parameter from the request.
 
 ```php
 public array $searchExactFields = [];
@@ -100,7 +112,9 @@ public array $searchExactFields = [
 ];
 ```
 
-#### Perform a lookup for results in the specified columns wrapping the `search` parameter from the request with `DATE()` mysql function. <!-- omit in toc -->
+<br/>
+
+- Perform a lookup for results in the specified columns wrapping the `search` parameter from the request with `DATE()` mysql function.
 
 ```php
 public array $searchDateFields = [];
@@ -118,7 +132,9 @@ public array $searchDateFields = [
 ];
 ```
 
-#### Filter columns by exact given values. Ensure that the columns entered are in plural form. <!-- omit in toc -->
+<br/>
+
+- Filter columns by exact given values. Ensure that the columns entered are in plural form.
 
 ```php
 public array $filters = [];
@@ -135,7 +151,9 @@ public array $filters = [
 ];
 ```
 
-#### Filter date columns by min and max values <!-- omit in toc -->
+<br/>
+
+- Filter date columns by min and max values
 
 ```php
 public array $dateFilters = [];
@@ -152,7 +170,9 @@ public array $dateFilters = [
 ];
 ```
 
-#### Filter columns that are `NULL` or `NOT NULL` <!-- omit in toc -->
+<br/>
+
+- Filter columns that are `NULL` or `NOT NULL`
 
 ```php
 public ?array $isEmptyFilters = [];
@@ -169,7 +189,9 @@ public ?array $isEmptyFilters = [
 ];
 ```
 
-#### Define default order by column <!-- omit in toc -->
+<br/>
+
+- Define default order by column
 
 ```php
 public ?array $defaultOrderByColumns = null;
@@ -191,6 +213,8 @@ But if the request has `sort` query parameter, then it will override the `defaul
 ```
 
 This will sort the results first by `id` descending then by `name` ascending
+
+---
 
 ## Todo
 
