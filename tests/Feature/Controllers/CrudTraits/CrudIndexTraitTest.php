@@ -2,16 +2,21 @@
 
 namespace Tests\Feature\Controllers\CrudTraits;
 
+use Tests\Stubs\SupaLaraExampleModel;
 use Tests\TestCase;
 
 class CrudIndexTraitTest extends TestCase
 {
     public function testItGetsAllRecordsUsingIndexMethod()
     {
-        $this->markTestSkipped();
+        SupaLaraExampleModel::factory(2)->create();
 
         $response = $this->getJson('/examples');
 
-        $response->assertStatus(500);
+        $response->assertOk()
+            ->assertJson([
+                ['id' => 1],
+                ['id' => 2]
+            ]);
     }
 }
