@@ -8,8 +8,7 @@ Boilerplate and helpers for Supaapps Laravel projects
 - [Usage](#usage)
   - [CRUD](#crud)
   - [Available CRUD properties](#available-crud-properties)
-- [Overrides](#overrides)
-  - [CRUD Controller](#crud-controller)
+- [CRUD Controller Override](#crud-controller-override)
 - [Todo](#todo)
 
 ## Installation
@@ -45,7 +44,7 @@ public string $model = \App\Models\Example::class; // replace with your model
 
 <br/>
 
-- Paginate the response from index response or not. (default = `false`)
+- Paginate the response from index response or not.
 
 ```php
 public bool $shouldPaginate = false;
@@ -53,7 +52,7 @@ public bool $shouldPaginate = false;
 
 <br/>
 
-- Enable deletion for the model. (default = `false`)
+- Enable deletion for the model.
 
 ```php
 public bool $isDeletable = false;
@@ -61,7 +60,7 @@ public bool $isDeletable = false;
 
 <br/>
 
-- Disable updates on the model. (default = `false`)
+- Disable updates on the model.
 
 ```php
 public bool $readOnly = false;
@@ -76,6 +75,8 @@ public ?string $searchField = null; // replace with desired column
 ```
 
 <br/>
+
+> #### All of the upcoming properties should be array. If you want to add some logic head to [CRUD controller override](#crud-controller-override) <!--omit in toc-->
 
 - Perform a lookup for <u>similar</u> results in the specified columns using the **`LIKE` operator** with the `search` parameter from the request.
 
@@ -218,19 +219,68 @@ This will sort the results first by `id` descending then by `name` ascending
 
 ---
 
-## Overrides
+## CRUD Controller Override
 
-### CRUD Controller
+You can override properties in your controller using getters:
 
-You can override properties in your controller using getters
+- Override `$searchSimilarFields`
 
-<!-- TODO -->
+```php
+private function getSearchSimilarFields(): array;
+```
+
+- Override `$searchExactFields`
+
+```php
+private function getSearchExactFields(): array;
+```
+
+- Override `$searchDateFields`
+
+```php
+private function getSearchDateFields(): array;
+```
+
+- Override `$filters`
+
+```php
+private function getFilters(): array;
+```
+
+- Override `$dateFilters`
+
+```php
+private function getDateFilters(): array;
+```
+
+- Override `$isEmptyFilters`
+
+```php
+private function getIsEmptyFilters(): array;
+```
+
+- Get allowed list that can be ordered by
+
+```php
+// by default, it merges the values from:
+//    $this->getSearchSimilarFields(),
+//    $this->getSearchExactFields(),
+//    $this->getSearchDateFields()
+private function getOrderByColumns(): array;
+```
+
+- Override `$defaultOrderByColumns`
+
+```php
+private function getDefaultOrderByColumns(): ?array;
+```
+
 ---
 
 ## Todo
 
 - [X] Add Basic CRUD functions
 - [X] Add Basic audit & observers
-- [ ] Tests for Crud
+- [ ] Tests for CRUD
 - [ ] Tests for Audit
 - [ ] Publish Dockerfile
