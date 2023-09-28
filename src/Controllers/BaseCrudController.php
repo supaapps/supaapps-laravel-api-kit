@@ -2,6 +2,9 @@
 
 namespace Supaapps\Supalara\Controllers;
 
+use Error;
+use Supaapps\Supalara\Exceptions\CrudModelIsNotDefinedException;
+
 class BaseCrudController extends Controller
 {
     /**
@@ -88,4 +91,13 @@ class BaseCrudController extends Controller
      * @var array|null
      */
     public ?array $defaultOrderByColumns = null;
+
+    function __construct()
+    {
+        try {
+            $this->model;
+        } catch (Error) {
+            throw new CrudModelIsNotDefinedException();
+        }
+    }
 }
