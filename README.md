@@ -19,6 +19,12 @@ Boilerplates and helpers for Supaapps Laravel projects
 composer test
 ```
 
+## Linting
+
+```sh
+composer lint
+```
+
 ## Useful links
 
 - https://www.laravelpackage.com/

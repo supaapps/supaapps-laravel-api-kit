@@ -29,7 +29,8 @@
     },
     "require-dev": {
         "orchestra/testbench": "^8.0",
-        "phpunit/phpunit": "^10.3"
+        "phpunit/phpunit": "^10.3",
+        "squizlabs/php_codesniffer": "^3.7"
     },
     "extra": {
         "laravel": {
@@ -39,6 +40,7 @@
         }
     },
     "scripts": {
-        "test": "./vendor/bin/phpunit"
+        "test": "./vendor/bin/phpunit --testdox",
+        "lint": "./vendor/bin/phpcs src tests config database -vvv"
     }
 }
