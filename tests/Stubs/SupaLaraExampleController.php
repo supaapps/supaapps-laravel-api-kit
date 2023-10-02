@@ -22,4 +22,8 @@ class SupaLaraExampleController extends BaseCrudController
     public array $searchDateFields = [
         'created_at',
     ];
+
+    public array $filters = [
+        'ids',
+    ];
 }

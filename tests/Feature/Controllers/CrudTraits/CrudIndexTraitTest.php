@@ -103,4 +103,18 @@ class CrudIndexTraitTest extends TestCase
                 ['id' => 2]
             ]);
     }
+
+    public function testItFiltersByGivenFilters()
+    {
+        SupaLaraExampleModel::factory(3)->create();
+
+        $response = $this->getJson("/examples?ids[]=1&ids[]=2");
+
+        $response->assertOk()
+            ->assertJsonCount(2)
+            ->assertJson([
+                ['id' => 1],
+                ['id' => 2],
+            ]);
+    }
 }
