@@ -149,8 +149,8 @@ In the following example, it will apply the query `WHERE id IN (1, 2) AND code I
 // user hit endpoint > /example?ids[]=1&ids[]=2&codes[]=ABC
 
 public array $filters = [
-    'ids' => [],
-    'codes' => [],
+    'ids',
+    'codes',
 ];
 ```
 
