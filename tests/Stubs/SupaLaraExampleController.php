@@ -34,4 +34,6 @@ class SupaLaraExampleController extends BaseCrudController
     public ?array $isEmptyFilters = [
         'label',
     ];
+
+    public ?array $defaultOrderByColumns = ['id,desc'];
 }

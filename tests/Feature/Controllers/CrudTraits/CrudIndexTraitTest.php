@@ -15,8 +15,8 @@ class CrudIndexTraitTest extends TestCase
 
         $response->assertOk()
             ->assertJson([
+                ['id' => 2],
                 ['id' => 1],
-                ['id' => 2]
             ]);
     }
 
@@ -113,8 +113,8 @@ class CrudIndexTraitTest extends TestCase
         $response->assertOk()
             ->assertJsonCount(2)
             ->assertJson([
-                ['id' => 1],
                 ['id' => 2],
+                ['id' => 1],
             ]);
     }
 
@@ -181,8 +181,8 @@ class CrudIndexTraitTest extends TestCase
         $response->assertOk()
             ->assertJsonCount(2)
             ->assertJson([
-                ['id' => 2],
                 ['id' => 3],
+                ['id' => 2],
             ]);
     }
 
@@ -215,6 +215,33 @@ class CrudIndexTraitTest extends TestCase
             ->assertJsonCount(1)
             ->assertJson([
                 ['id' => 2],
+            ]);
+    }
+
+    public function testItSortsByGivenColumns()
+    {
+        $this->travel(1)->minute();
+        SupaLaraExampleModel::factory()->create();
+        SupaLaraExampleModel::factory()->create([
+            'label' => null,
+        ]);
+        $this->travelBack();
+
+        SupaLaraExampleModel::factory()->create();
+
+        $query = http_build_query([
+            'sort' => [
+                'label,asc', // order null label first
+                'created_at,desc', // then order new created first
+            ]
+        ]);
+        $response = $this->getJson("/examples?{$query}");
+
+        $response->assertOk()
+            ->assertJson([
+                ['id' => 2],
+                ['id' => 1],
+                ['id' => 3],
             ]);
     }
 }
