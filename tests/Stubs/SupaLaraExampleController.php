@@ -30,4 +30,8 @@ class SupaLaraExampleController extends BaseCrudController
     public array $dateFilters = [
         'created_at',
     ];
+
+    public ?array $isEmptyFilters = [
+        'label',
+    ];
 }

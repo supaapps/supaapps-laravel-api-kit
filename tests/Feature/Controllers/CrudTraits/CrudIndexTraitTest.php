@@ -185,4 +185,36 @@ class CrudIndexTraitTest extends TestCase
                 ['id' => 3],
             ]);
     }
+
+    public function testItGetsNullLabelRecords()
+    {
+        SupaLaraExampleModel::factory()->create([
+            'label' => null
+        ]);
+        SupaLaraExampleModel::factory()->create();
+
+        $response = $this->getJson('/examples?is_empty[label]=true');
+
+        $response->assertOk()
+            ->assertJsonCount(1)
+            ->assertJson([
+                ['id' => 1],
+            ]);
+    }
+
+    public function testItGetsNotNullLabelRecords()
+    {
+        SupaLaraExampleModel::factory()->create([
+            'label' => null
+        ]);
+        SupaLaraExampleModel::factory()->create();
+
+        $response = $this->getJson('/examples?is_empty[label]=false');
+
+        $response->assertOk()
+            ->assertJsonCount(1)
+            ->assertJson([
+                ['id' => 2],
+            ]);
+    }
 }
