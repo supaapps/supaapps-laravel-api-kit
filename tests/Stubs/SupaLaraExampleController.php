@@ -26,4 +26,8 @@ class SupaLaraExampleController extends BaseCrudController
     public array $filters = [
         'ids',
     ];
+
+    public array $dateFilters = [
+        'created_at',
+    ];
 }

@@ -108,13 +108,81 @@ class CrudIndexTraitTest extends TestCase
     {
         SupaLaraExampleModel::factory(3)->create();
 
-        $response = $this->getJson("/examples?ids[]=1&ids[]=2");
+        $response = $this->getJson('/examples?ids[]=1&ids[]=2');
 
         $response->assertOk()
             ->assertJsonCount(2)
             ->assertJson([
                 ['id' => 1],
                 ['id' => 2],
+            ]);
+    }
+
+    public function testItFiltersByGivenMinDate()
+    {
+        $this->travel(-1)->day(); // set date to yesterday
+        SupaLaraExampleModel::factory()->create();
+        $this->travelBack(); // set date back to present
+
+        SupaLaraExampleModel::factory()->create();
+        $today = date('Y-m-d');
+
+        $response = $this->getJson("/examples?created_at_min={$today}");
+
+        $response->assertOk()
+            ->assertJsonCount(1)
+            ->assertJson([
+                ['id' => 2],
+            ]);
+    }
+
+    public function testItFiltersByGivenMaxDate()
+    {
+        $this->travel(-1)->day(); // set date to yesterday
+        SupaLaraExampleModel::factory()->create();
+        $yesterday = now()->toDateString();
+        $this->travelBack(); // set date back to present
+
+        SupaLaraExampleModel::factory()->create();
+
+        $response = $this->getJson("/examples?created_at_max={$yesterday}");
+
+        $response->assertOk()
+            ->assertJsonCount(1)
+            ->assertJson([
+                ['id' => 1],
+            ]);
+    }
+
+    public function testItFiltersCreatedAtByGivenRange()
+    {
+        $this->travel(-10)->day(); // set date to 10 days ago
+        SupaLaraExampleModel::factory()->create();
+
+        $this->travel(9)->day(); // set date to yesterday
+        SupaLaraExampleModel::factory()->create(); // id = 2
+        $min = now()->toDateString();
+
+        $this->travelBack(); // set date back to present
+        SupaLaraExampleModel::factory()->create(); // id = 3
+        $max = now()->toDateString();
+
+        $this->travel(2)->day(); // set date to day after tomorrow
+        SupaLaraExampleModel::factory()->create();
+        $this->travelBack(); // set date back to present
+
+        $query = http_build_query([
+            'created_at_min' => $min,
+            'created_at_max' => $max,
+        ]);
+
+        $response = $this->getJson("/examples?{$query}");
+
+        $response->assertOk()
+            ->assertJsonCount(2)
+            ->assertJson([
+                ['id' => 2],
+                ['id' => 3],
             ]);
     }
 }
