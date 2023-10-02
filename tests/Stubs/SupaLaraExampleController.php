@@ -10,4 +10,16 @@ class SupaLaraExampleController extends BaseCrudController
     use AllCrudTraits;
 
     public string $model = SupaLaraExampleModel::class;
+
+    public array $searchSimilarFields = [
+        'label',
+    ];
+
+    public array $searchExactFields = [
+        'id',
+    ];
+
+    public array $searchDateFields = [
+        'created_at',
+    ];
 }

@@ -12,4 +12,6 @@ class SupaLaraPaginatedExampleController extends BaseCrudController
     public string $model = SupaLaraExampleModel::class;
 
     public bool $shouldPaginate = true;
+
+    public ?string $searchField = 'id';
 }

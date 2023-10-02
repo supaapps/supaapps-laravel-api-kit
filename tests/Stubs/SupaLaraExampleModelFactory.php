@@ -10,6 +10,8 @@ class SupaLaraExampleModelFactory extends Factory
 
     public function definition(): array
     {
-        return [];
+        return [
+            'label' => fake()->name
+        ];
     }
 }

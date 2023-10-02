@@ -33,6 +33,7 @@ class TestCase extends BaseTestCase
         // create fake examples table for testing
         Schema::create('supa_lara_example_models', function(Blueprint $table) {
             $table->id();
+            $table->string('label')->nullable();
             $table->timestamps();
         });
 
