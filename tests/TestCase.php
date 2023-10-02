@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Supaapps\Supalara\SupalaraServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use Tests\Stubs\SupaLaraPaginatedExampleController;
 
 class TestCase extends BaseTestCase
 {
@@ -37,5 +38,6 @@ class TestCase extends BaseTestCase
 
         // register curd example routes
         Route::apiResource('examples', SupaLaraExampleController::class);
+        Route::get('paginated-examples', [SupaLaraPaginatedExampleController::class, 'index']);
     }
 }
