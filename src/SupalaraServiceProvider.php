@@ -3,6 +3,7 @@
 namespace Supaapps\Supalara;
 
 use Illuminate\Support\ServiceProvider;
+use Supaapps\Supalara\Console\Commands\ControllerMakeCommand;
 use Supaapps\Supalara\Services\ObserversProvider;
 
 class SupalaraServiceProvider extends ServiceProvider
@@ -12,10 +13,13 @@ class SupalaraServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        $this->publishes([
-            __DIR__.'/../config/supalara.php' => config_path('supalara.php'),
-        ]);
+        if ($this->app->runningInConsole()) {
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+            $this->publishes([
+                __DIR__.'/../config/supalara.php' => config_path('supalara.php'),
+            ]);
+            $this->registerCommands();
+        }
     }
 
     public function register()
@@ -23,5 +27,12 @@ class SupalaraServiceProvider extends ServiceProvider
         if (config('supalara.audit', false)) {
             $this->app->register(ObserversProvider::class);
         }
+    }
+
+    private function registerCommands(): void
+    {
+        $this->commands([
+            ControllerMakeCommand::class,
+        ]);
     }
 }

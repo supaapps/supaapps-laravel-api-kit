@@ -1,0 +1,11 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ namespacedModel }};
+use Supaapps\Supalara\Controllers\BaseCrudController;
+
+class {{ class }} extends BaseCrudController
+{
+    public string $model = {{ model }}::class;
+}
