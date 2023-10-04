@@ -3,7 +3,9 @@
 namespace Supaapps\Supalara\Console\Commands;
 
 use Illuminate\Routing\Console\ControllerMakeCommand;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -21,6 +23,12 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
     protected $description = 'Create a new CRUD controller';
 
     private array $tableColumns = [];
+
+    private array $tableDateColumns = [];
+
+    private array $tableNonDateColumns = [];
+
+    private array $tableNullableColumns = [];
 
     protected function getStub()
     {
@@ -156,73 +164,73 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         ) {
             $input->setOption('searchField', select(
                 'Select column to search with:',
-                $this->tableColumns
+                $this->tableNonDateColumns
             ));
         }
 
         if (
             empty($this->option('searchSimilarFields')) &&
-            !empty($this->tableColumns) &&
+            !empty($this->tableNonDateColumns) &&
             confirm("Do yo want to search for similar values in some columns?", false)
         ) {
             $input->setOption('searchSimilarFields', multiselect(
                 'Select columns to search for similar values:',
-                $this->tableColumns
+                $this->tableNonDateColumns
             ));
         }
 
         if (
             empty($this->option('searchExactFields')) &&
-            !empty($this->tableColumns) &&
+            !empty($this->tableNonDateColumns) &&
             confirm("Do yo want to search for exact values in some columns?", false)
         ) {
             $input->setOption('searchExactFields', multiselect(
                 'Select columns to search for exact values:',
-                $this->tableColumns
+                $this->tableNonDateColumns
             ));
         }
 
         if (
             empty($this->option('searchDateFields')) &&
-            !empty($this->tableColumns) &&
+            !empty($this->tableDateColumns) &&
             confirm("Do yo want to search for exact dates?", false)
         ) {
             $input->setOption('searchDateFields', multiselect(
                 'Select columns to search for date values:',
-                $this->tableColumns
+                $this->tableDateColumns
             ));
         }
 
         if (
             empty($this->option('filters')) &&
-            !empty($this->tableColumns) &&
+            !empty($this->tableNonDateColumns) &&
             confirm("Do you want to enable filters for columns?", false)
         ) {
             $input->setOption('filters', multiselect(
                 'Enable filters for selected columns:',
-                $this->tableColumns
+                array_map(fn ($c) => Str::plural($c), $this->tableNonDateColumns)
             ));
         }
 
         if (
             empty($this->option('dateFilters')) &&
-            !empty($this->tableColumns) &&
+            !empty($this->tableDateColumns) &&
             confirm("Do you want to enable date filters?", false)
         ) {
             $input->setOption('dateFilters', multiselect(
                 'Enable dateFilters for selected columns:',
-                $this->tableColumns
+                $this->tableDateColumns
             ));
         }
 
         if (
             empty($this->option('isEmptyFilters')) &&
-            !empty($this->tableColumns) &&
+            !empty($this->tableNullableColumns) &&
             confirm("Filter by null/not null columns?", false)
         ) {
             $input->setOption('isEmptyFilters', multiselect(
                 'Filter null/not null for selected columns:',
-                $this->tableColumns
+                $this->tableNullableColumns
             ));
         }
 
@@ -244,7 +252,20 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
 
         if (class_exists($modelClass)) {
             $table = app($modelClass)->getTable();
-            $this->tableColumns = Schema::getColumnListing($table);
+            $columns = DB::select("describe {$table}");
+            $this->tableColumns = Arr::pluck($columns, 'Field');
+
+            $this->tableDateColumns = Arr::pluck(array_filter(
+                $columns,
+                fn (object $column) => in_array($column->Type, ['date', 'datetime', 'timestamp'])
+            ), 'Field');
+
+            $this->tableNullableColumns = Arr::pluck(array_filter(
+                $columns,
+                fn (object $column) => $column->Null === 'YES'
+            ), 'Field');
+
+            $this->tableNonDateColumns = array_diff($this->tableColumns, $this->tableDateColumns);
         }
     }
 
