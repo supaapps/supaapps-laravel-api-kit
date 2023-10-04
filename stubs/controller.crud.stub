@@ -8,4 +8,25 @@ use Supaapps\Supalara\Controllers\BaseCrudController;
 class {{ class }} extends BaseCrudController
 {
     public string $model = {{ model }}::class;
+
+    public bool $shouldPaginate = {{ paginated }};
+
+    public bool $isDeletable = {{ deletable }};
+
+    public bool $readOnly = {{ readOnly }};
+
+    // public ?string $searchField = null;
+    // public array $searchSimilarFields = [];
+    //
+    // public array $searchExactFields = [];
+    //
+    // public array $searchDateFields = [];
+    //
+    // public array $filters = [];
+    //
+    // public array $dateFilters = [];
+    //
+    // public ?array $isEmptyFilters = [];
+    //
+    // public ?array $defaultOrderByColumns = null;
 }
