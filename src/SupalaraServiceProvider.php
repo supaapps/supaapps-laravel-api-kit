@@ -3,7 +3,7 @@
 namespace Supaapps\Supalara;
 
 use Illuminate\Support\ServiceProvider;
-use Supaapps\Supalara\Console\Commands\ControllerMakeCommand;
+use Supaapps\Supalara\Console\Commands\CrudControllerMakeCommand;
 use Supaapps\Supalara\Services\ObserversProvider;
 
 class SupalaraServiceProvider extends ServiceProvider
@@ -32,7 +32,7 @@ class SupalaraServiceProvider extends ServiceProvider
     private function registerCommands(): void
     {
         $this->commands([
-            ControllerMakeCommand::class,
+            CrudControllerMakeCommand::class,
         ]);
     }
 }
