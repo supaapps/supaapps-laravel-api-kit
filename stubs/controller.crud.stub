@@ -15,18 +15,19 @@ class {{ class }} extends BaseCrudController
 
     public bool $readOnly = {{ readOnly }};
 
-    // public ?string $searchField = null;
+    public ?string $searchField = {{ searchField }};
+
     // public array $searchSimilarFields = [];
-    //
+
     // public array $searchExactFields = [];
-    //
+
     // public array $searchDateFields = [];
-    //
+
     // public array $filters = [];
-    //
+
     // public array $dateFilters = [];
-    //
+
     // public ?array $isEmptyFilters = [];
-    //
+
     // public ?array $defaultOrderByColumns = null;
 }
