@@ -87,6 +87,12 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         $this->replaceOnlyIfOptionChanged('readOnly', 'public bool $readOnly', $replace);
         $this->replaceOnlyIfOptionChanged('searchField', 'public ?string $searchField', $replace);
         $this->replaceOnlyIfOptionChanged('searchSimilarFields', 'public array $searchSimilarFields', $replace);
+        $this->replaceOnlyIfOptionChanged('searchExactFields', 'public array $searchExactFields', $replace);
+        $this->replaceOnlyIfOptionChanged('searchDateFields', 'public array $searchDateFields', $replace);
+        $this->replaceOnlyIfOptionChanged('filters', 'public array $filters', $replace);
+        $this->replaceOnlyIfOptionChanged('dateFilters', 'public array $dateFilters', $replace);
+        $this->replaceOnlyIfOptionChanged('isEmptyFilters', 'public ?array $isEmptyFilters', $replace);
+        $this->replaceOnlyIfOptionChanged('defaultOrderByColumns', 'public ?array $defaultOrderByColumns', $replace);
     }
 
     private function replaceOnlyIfOptionChanged(string $key, string $stubLine, array &$replace): void
@@ -114,7 +120,13 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
             ['isDeletable', null, InputOption::VALUE_OPTIONAL, 'The model can be deleted', false],
             ['readOnly', null, InputOption::VALUE_OPTIONAL, 'The model is for read only', false],
             ['searchField', null, InputOption::VALUE_OPTIONAL, 'Search by single column', null],
-            ['searchSimilarFields', null, InputOption::VALUE_OPTIONAL, 'Look for similar values in given columns', null],
+            ['searchSimilarFields', null, InputOption::VALUE_OPTIONAL, 'Look for similar values in given columns', []],
+            ['searchExactFields', null, InputOption::VALUE_OPTIONAL, 'Look for exact values in given columns', []],
+            ['searchDateFields', null, InputOption::VALUE_OPTIONAL, 'Look for exact dates in given columns', []],
+            ['filters', null, InputOption::VALUE_OPTIONAL, 'Look for exact filters in given columns', []],
+            ['dateFilters', null, InputOption::VALUE_OPTIONAL, 'Look for date range for given columns', []],
+            ['isEmptyFilters', null, InputOption::VALUE_OPTIONAL, 'Filter null/not null columns', []],
+            ['defaultOrderByColumns', null, InputOption::VALUE_OPTIONAL, 'Default order column', null],
         ];
     }
 
@@ -157,6 +169,72 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
                 'Select columns to search for similar values:',
                 $this->tableColumns
             ));
+        }
+
+        if (
+            empty($this->option('searchExactFields')) &&
+            !empty($this->tableColumns) &&
+            confirm("Do yo want to search for exact values in some columns?", false)
+        ) {
+            $input->setOption('searchExactFields', multiselect(
+                'Select columns to search for exact values:',
+                $this->tableColumns
+            ));
+        }
+
+        if (
+            empty($this->option('searchDateFields')) &&
+            !empty($this->tableColumns) &&
+            confirm("Do yo want to search for exact dates?", false)
+        ) {
+            $input->setOption('searchDateFields', multiselect(
+                'Select columns to search for date values:',
+                $this->tableColumns
+            ));
+        }
+
+        if (
+            empty($this->option('filters')) &&
+            !empty($this->tableColumns) &&
+            confirm("Do you want to enable filters for columns?", false)
+        ) {
+            $input->setOption('filters', multiselect(
+                'Enable filters for selected columns:',
+                $this->tableColumns
+            ));
+        }
+
+        if (
+            empty($this->option('dateFilters')) &&
+            !empty($this->tableColumns) &&
+            confirm("Do you want to enable date filters?", false)
+        ) {
+            $input->setOption('dateFilters', multiselect(
+                'Enable dateFilters for selected columns:',
+                $this->tableColumns
+            ));
+        }
+
+        if (
+            empty($this->option('isEmptyFilters')) &&
+            !empty($this->tableColumns) &&
+            confirm("Filter by null/not null columns?", false)
+        ) {
+            $input->setOption('isEmptyFilters', multiselect(
+                'Filter null/not null for selected columns:',
+                $this->tableColumns
+            ));
+        }
+
+        if (
+            empty($this->option('defaultOrderByColumns')) &&
+            !empty($this->tableColumns) &&
+            confirm("Do you want to order by default columns?", false)
+        ) {
+            $column = select('Select columns to order by default:', $this->tableColumns);
+            $sort = select('Sort order (asc/desc):', ['asc', 'desc'], 'asc');
+
+            $input->setOption('defaultOrderByColumns', ["{$column},{$sort}"]);
         }
     }
 
