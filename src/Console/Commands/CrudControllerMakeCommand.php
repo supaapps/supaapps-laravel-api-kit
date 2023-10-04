@@ -8,8 +8,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\VarExporter\VarExporter;
 
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\select;
 
 class CrudControllerMakeCommand extends ControllerMakeCommand
@@ -30,25 +32,6 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         return array_merge(parent::getArguments(), [
             ['model', InputArgument::REQUIRED, 'The CRUD model class (without App\Models\)'],
         ]);
-    }
-
-    protected function getOptions()
-    {
-        return [
-            ['shouldPaginate', null, InputOption::VALUE_OPTIONAL, 'Indicates the index should return paginated response', false],
-            ['isDeletable', null, InputOption::VALUE_OPTIONAL, 'The model can be deleted', false],
-            ['readOnly', null, InputOption::VALUE_OPTIONAL, 'The model is for read only', false],
-            ['searchField', null, InputOption::VALUE_OPTIONAL, 'Search by single column', null],
-        ];
-    }
-
-    private function getDefaultOption(string $key)
-    {
-        return array_reduce($this->getOptions(), function ($carry, array $option) use ($key) {
-            if ($option[0] === $key) {
-                return $option[4];
-            }
-        }, null);
     }
 
     protected function buildClass($name)
@@ -103,6 +86,7 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         $this->replaceOnlyIfOptionChanged('isDeletable', 'public bool $isDeletable', $replace);
         $this->replaceOnlyIfOptionChanged('readOnly', 'public bool $readOnly', $replace);
         $this->replaceOnlyIfOptionChanged('searchField', 'public ?string $searchField', $replace);
+        $this->replaceOnlyIfOptionChanged('searchSimilarFields', 'public array $searchSimilarFields', $replace);
     }
 
     private function replaceOnlyIfOptionChanged(string $key, string $stubLine, array &$replace): void
@@ -110,8 +94,28 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         if ($this->option($key) == $this->getDefaultOption($key)) {
             $replace["\n    {$stubLine} = {{ {$key} }};\n"] = '';
         } else {
-            $replace["{{ {$key} }}"] = var_export($this->option($key), true);
+            $replace["{{ {$key} }}"] = VarExporter::export($this->option($key));
         }
+    }
+
+    private function getDefaultOption(string $key)
+    {
+        return array_reduce($this->getOptions(), function ($carry, array $option) use ($key) {
+            if ($option[0] === $key) {
+                return $option[4];
+            }
+        }, null);
+    }
+
+    protected function getOptions()
+    {
+        return [
+            ['shouldPaginate', null, InputOption::VALUE_OPTIONAL, 'Indicates the index should return paginated response', false],
+            ['isDeletable', null, InputOption::VALUE_OPTIONAL, 'The model can be deleted', false],
+            ['readOnly', null, InputOption::VALUE_OPTIONAL, 'The model is for read only', false],
+            ['searchField', null, InputOption::VALUE_OPTIONAL, 'Search by single column', null],
+            ['searchSimilarFields', null, InputOption::VALUE_OPTIONAL, 'Look for similar values in given columns', null],
+        ];
     }
 
     protected function afterPromptingForMissingArguments(InputInterface $input, OutputInterface $output)
@@ -133,18 +137,27 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
             confirm('Is the model for read only?', $this->option('readOnly'))
         );
 
-        if (is_null($this->option('searchField')) && !empty($this->tableColumns)) {
-            $searchByField = confirm("Do yo want to search by single column?", false);
-
-            if ($searchByField) {
-                $input->setOption('searchField', select(
-                    'Enter column name to search with:',
-                    $this->tableColumns,
-                    $this->option('searchField')
-                ));
-            }
+        if (
+            is_null($this->option('searchField')) &&
+            !empty($this->tableColumns) &&
+            confirm("Do yo want to search by single column?", false)
+        ) {
+            $input->setOption('searchField', select(
+                'Select column to search with:',
+                $this->tableColumns
+            ));
         }
 
+        if (
+            empty($this->option('searchSimilarFields')) &&
+            !empty($this->tableColumns) &&
+            confirm("Do yo want to search for similar values in some columns?", false)
+        ) {
+            $input->setOption('searchSimilarFields', multiselect(
+                'Select columns to search for similar values:',
+                $this->tableColumns
+            ));
+        }
     }
 
     private function setModelColumns(): void

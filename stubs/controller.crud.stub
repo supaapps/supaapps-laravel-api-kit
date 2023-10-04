@@ -17,7 +17,7 @@ class {{ class }} extends BaseCrudController
 
     public ?string $searchField = {{ searchField }};
 
-    // public array $searchSimilarFields = [];
+    public array $searchSimilarFields = {{ searchSimilarFields }};
 
     // public array $searchExactFields = [];
 
