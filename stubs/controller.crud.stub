@@ -9,9 +9,9 @@ class {{ class }} extends BaseCrudController
 {
     public string $model = {{ model }}::class;
 
-    public bool $shouldPaginate = {{ paginated }};
+    public bool $shouldPaginate = {{ shouldPaginate }};
 
-    public bool $isDeletable = {{ deletable }};
+    public bool $isDeletable = {{ isDeletable }};
 
     public bool $readOnly = {{ readOnly }};
 

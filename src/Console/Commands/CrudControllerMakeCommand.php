@@ -31,8 +31,8 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
     protected function getOptions()
     {
         return [
-            ['paginated', null, InputOption::VALUE_OPTIONAL, 'Indicates the index should return paginated response', false],
-            ['deletable', null, InputOption::VALUE_OPTIONAL, 'The model can be deleted', false],
+            ['shouldPaginate', null, InputOption::VALUE_OPTIONAL, 'Indicates the index should return paginated response', false],
+            ['isDeletable', null, InputOption::VALUE_OPTIONAL, 'The model can be deleted', false],
             ['readOnly', null, InputOption::VALUE_OPTIONAL, 'The model is for read only', false],
         ];
     }
@@ -58,15 +58,7 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
 
         $replace["use {$controllerNamespace}\Controller;\n"] = '';
 
-        // TODO: This block can be dry
-        if ($this->option('paginated') == $this->getDefaultOption('paginated')) {
-            $replace["\n    public bool \$shouldPaginate = {{ paginated }};\n"] = '';
-        } else {
-            $replace["{{ paginated }}"] = var_export($this->option('paginated'), true);
-        }
-        $replace["{{ deletable }}"] = var_export($this->option('deletable'), true);
-        $replace["{{ readOnly }}"] = var_export($this->option('readOnly'), true);
-
+        $this->replaceOptionKeys($replace);
         $stub = $this->files->get($this->getStub());
 
         $parentBuildClass = (string) $this->replaceNamespace($stub, $name)
@@ -100,16 +92,32 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         ];
     }
 
+    private function replaceOptionKeys(&$replace): void
+    {
+        $this->replaceOnlyIfOptionChanged('shouldPaginate', 'public bool $shouldPaginate', $replace);
+        $this->replaceOnlyIfOptionChanged('isDeletable', 'public bool $isDeletable', $replace);
+        $this->replaceOnlyIfOptionChanged('readOnly', 'public bool $readOnly', $replace);
+    }
+
+    private function replaceOnlyIfOptionChanged(string $key, string $stubLine, array &$replace): void
+    {
+        if ($this->option($key) == $this->getDefaultOption($key)) {
+            $replace["\n    {$stubLine} = {{ {$key} }};\n"] = '';
+        } else {
+            $replace["{{ {$key} }}"] = var_export($this->option($key), true);
+        }
+    }
+
     protected function afterPromptingForMissingArguments(InputInterface $input, OutputInterface $output)
     {
-        $input->setOption('paginated', confirm(
-            label: 'Is index should return paginated response?',
-            default: $this->option('paginated')
+        $input->setOption('shouldPaginate', confirm(
+            label: 'Is index should return shouldPaginate response?',
+            default: $this->option('shouldPaginate')
         ));
 
-        $input->setOption('deletable', confirm(
-            label: 'Is the model deletable?',
-            default: $this->option('deletable')
+        $input->setOption('isDeletable', confirm(
+            label: 'Is the model isDeletable?',
+            default: $this->option('isDeletable')
         ));
 
         $input->setOption('readOnly', confirm(
@@ -122,10 +130,6 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
     {
         return array_merge(parent::promptForMissingArgumentsUsing(), [
             'model' => [
-                'The CRUD model class (without App\Models\)',
-                'E.g. User',
-            ],
-            'paginated' => [
                 'The CRUD model class (without App\Models\)',
                 'E.g. User',
             ],
