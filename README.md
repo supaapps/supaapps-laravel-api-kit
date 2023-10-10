@@ -68,7 +68,7 @@ public bool $readOnly = false;
 
 <br/>
 
-- Perform searches on the specified column using the `search` parameter from the request.
+- Perform searches on single column using the `search` parameter from the request. *If you want to search multiple columns use `$searchSimilarFields`, see next property.*
 
 ```php
 public ?string $searchField = null; // replace with desired column
