@@ -8,6 +8,9 @@ Boilerplate and helpers for Supaapps Laravel projects
 - [Usage](#usage)
   - [CRUD](#crud)
   - [Available CRUD properties](#available-crud-properties)
+  - [Properties used with `CrudIndexTrait`](#properties-used-with-crudindextrait)
+  - [Properties used with `UpdateIndexTrait`](#properties-used-with-updateindextrait)
+  - [Properties used with `DeleteIndexTrait`](#properties-used-with-deleteindextrait)
 - [CRUD Controller Override](#crud-controller-override)
 - [Todo](#todo)
 
@@ -42,28 +45,12 @@ There are multiple properties you can use within your CRUD controller:
 public string $model = \App\Models\Example::class; // replace with your model
 ```
 
-<br/>
+### Properties used with `CrudIndexTrait`
 
 - Paginate the response from index response or not.
 
 ```php
 public bool $shouldPaginate = false;
-```
-
-<br/>
-
-- Enable deletion for the model.
-
-```php
-public bool $isDeletable = false;
-```
-
-<br/>
-
-- Disable updates on the model.
-
-```php
-public bool $readOnly = false;
 ```
 
 <br/>
@@ -216,6 +203,22 @@ But if the request has `sort` query parameter, then it will override the `defaul
 ```
 
 This will sort the results first by `id` descending then by `name` ascending
+
+### Properties used with `UpdateIndexTrait`
+
+- Disable updates on the model.
+
+```php
+public bool $readOnly = false;
+```
+
+### Properties used with `DeleteIndexTrait`
+
+- Enable deletion for the model.
+
+```php
+public bool $isDeletable = false;
+```
 
 ---
 
