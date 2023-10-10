@@ -8,10 +8,11 @@ Boilerplate and helpers for Supaapps Laravel projects
 - [Usage](#usage)
   - [CRUD](#crud)
   - [Available CRUD properties](#available-crud-properties)
-  - [Properties used with `CrudIndexTrait`](#properties-used-with-crudindextrait)
-  - [Properties used with `UpdateIndexTrait`](#properties-used-with-updateindextrait)
-  - [Properties used with `DeleteIndexTrait`](#properties-used-with-deleteindextrait)
+  - [Properties used by `CrudIndexTrait`](#properties-used-by-crudindextrait)
+  - [Properties used by `UpdateIndexTrait`](#properties-used-by-updateindextrait)
+  - [Properties used by `DeleteIndexTrait`](#properties-used-by-deleteindextrait)
 - [CRUD Controller Override](#crud-controller-override)
+  - [Override methods in `CrudIndexTrait`](#override-methods-in-crudindextrait)
 - [Todo](#todo)
 
 ## Installation
@@ -45,7 +46,7 @@ There are multiple properties you can use within your CRUD controller:
 public string $model = \App\Models\Example::class; // replace with your model
 ```
 
-### Properties used with `CrudIndexTrait`
+### Properties used by `CrudIndexTrait`
 
 - Paginate the response from index response or not.
 
@@ -204,7 +205,7 @@ But if the request has `sort` query parameter, then it will override the `defaul
 
 This will sort the results first by `id` descending then by `name` ascending
 
-### Properties used with `UpdateIndexTrait`
+### Properties used by `UpdateIndexTrait`
 
 - Disable updates on the model.
 
@@ -212,7 +213,7 @@ This will sort the results first by `id` descending then by `name` ascending
 public bool $readOnly = false;
 ```
 
-### Properties used with `DeleteIndexTrait`
+### Properties used by `DeleteIndexTrait`
 
 - Enable deletion for the model.
 
@@ -224,7 +225,24 @@ public bool $isDeletable = false;
 
 ## CRUD Controller Override
 
-You can override properties in your controller using getters:
+If you want to add more logic to properties, you can override properties in your controller using getters. For example: you want to return different `$searchExactFields` depending on a condition:
+
+```php
+private function getSearchExactFields(): array
+{
+    if (request('user_type') == 'admin') {
+        return [
+            'admin_id'
+        ];
+    }
+
+    return [
+        'user_id'
+    ];
+}
+```
+
+### Override methods in `CrudIndexTrait`
 
 - Override `$searchSimilarFields`
 
