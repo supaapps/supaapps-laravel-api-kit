@@ -13,6 +13,9 @@ Boilerplate and helpers for Supaapps Laravel projects
   - [Properties used by `DeleteIndexTrait`](#properties-used-by-deleteindextrait)
 - [CRUD Controller Override](#crud-controller-override)
   - [Override methods in `CrudIndexTrait`](#override-methods-in-crudindextrait)
+- [Tests](#tests)
+- [Linting](#linting)
+- [Useful links](#useful-links)
 - [Todo](#todo)
 
 ## Installation
@@ -297,6 +300,23 @@ private function getDefaultOrderByColumns(): ?array;
 ```
 
 ---
+
+## Tests
+
+```sh
+composer test
+```
+
+## Linting
+
+```sh
+composer lint
+```
+
+## Useful links
+
+- https://www.laravelpackage.com/
+- https://github.com/orchestral/testbench
 
 ## Todo
 
