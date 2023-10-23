@@ -13,4 +13,19 @@ Boilerplates and helpers for Supaapps Laravel projects
 
 [ ] Publish Dockerfile
 
+## Tests
 
+```sh
+composer test
+```
+
+## Linting
+
+```sh
+composer lint
+```
+
+## Useful links
+
+- https://www.laravelpackage.com/
+- https://github.com/orchestral/testbench
