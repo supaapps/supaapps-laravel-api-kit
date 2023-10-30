@@ -2,10 +2,8 @@
 
 namespace Supaapps\Supalara\Observers;
 
-
 class UserSignatureObserver
 {
-
     /**
      * @todo We should detect user model and get ID from model, but remember:
      * we have in some projects different user providers

@@ -11,7 +11,8 @@ class BaseSetupController extends Controller
 
     /*
      * Setup the application first use
-     */public function setup(Request $request)
+     */
+    public function setup(Request $request)
     {
         if ($this->usersModel::count() > 0) {
             abort(403, 'Forbidden');

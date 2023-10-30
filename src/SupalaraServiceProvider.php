@@ -12,9 +12,9 @@ class SupalaraServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->publishes([
-            __DIR__.'/../config/supalara.php' => config_path('supalara.php'),
+            __DIR__ . '/../config/supalara.php' => config_path('supalara.php'),
         ]);
     }
 

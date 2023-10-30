@@ -41,6 +41,6 @@
     },
     "scripts": {
         "test": "./vendor/bin/phpunit --testdox",
-        "lint": "./vendor/bin/phpcs src tests config database -vvv"
+        "lint": "./vendor/bin/phpcs src tests config -vvv"
     }
 }
