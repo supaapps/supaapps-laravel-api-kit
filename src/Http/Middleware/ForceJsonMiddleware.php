@@ -1,6 +1,6 @@
 <?php
 
-namespace Supaapps\Supalara\Http\Middleware;
+namespace Supaapps\LaravelApiKit\Http\Middleware;
 
 use Closure;
 

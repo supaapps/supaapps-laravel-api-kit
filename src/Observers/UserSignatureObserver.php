@@ -1,6 +1,6 @@
 <?php
 
-namespace Supaapps\Supalara\Observers;
+namespace Supaapps\LaravelApiKit\Observers;
 
 class UserSignatureObserver
 {

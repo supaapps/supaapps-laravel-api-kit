@@ -1,6 +1,6 @@
 <?php
 
-namespace Supaapps\Supalara\Controllers;
+namespace Supaapps\LaravelApiKit\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
