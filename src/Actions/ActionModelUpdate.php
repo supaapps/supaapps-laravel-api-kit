@@ -2,7 +2,6 @@
 
 namespace Supaapps\Supalara\Actions;
 
-
 use Supaapps\Supalara\Models\SlActionType;
 
 class ActionModelUpdate extends BaseAction

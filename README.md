@@ -8,7 +8,14 @@ Boilerplate and helpers for Supaapps Laravel projects
 - [Usage](#usage)
   - [CRUD](#crud)
   - [Available CRUD properties](#available-crud-properties)
+  - [Properties used by `CrudIndexTrait`](#properties-used-by-crudindextrait)
+  - [Properties used by `UpdateIndexTrait`](#properties-used-by-updateindextrait)
+  - [Properties used by `DeleteIndexTrait`](#properties-used-by-deleteindextrait)
 - [CRUD Controller Override](#crud-controller-override)
+  - [Override methods in `CrudIndexTrait`](#override-methods-in-crudindextrait)
+- [Tests](#tests)
+- [Linting](#linting)
+- [Useful links](#useful-links)
 - [Todo](#todo)
 
 ## Installation
@@ -42,7 +49,7 @@ There are multiple properties you can use within your CRUD controller:
 public string $model = \App\Models\Example::class; // replace with your model
 ```
 
-<br/>
+### Properties used by `CrudIndexTrait`
 
 - Paginate the response from index response or not.
 
@@ -52,23 +59,7 @@ public bool $shouldPaginate = false;
 
 <br/>
 
-- Enable deletion for the model.
-
-```php
-public bool $isDeletable = false;
-```
-
-<br/>
-
-- Disable updates on the model.
-
-```php
-public bool $readOnly = false;
-```
-
-<br/>
-
-- Perform searches on the specified column using the `search` parameter from the request.
+- Perform searches on single column using the `search` parameter from the request. *If you want to search multiple columns use `$searchSimilarFields`, see next property.*
 
 ```php
 public ?string $searchField = null; // replace with desired column
@@ -217,11 +208,44 @@ But if the request has `sort` query parameter, then it will override the `defaul
 
 This will sort the results first by `id` descending then by `name` ascending
 
+### Properties used by `UpdateIndexTrait`
+
+- Disable updates on the model.
+
+```php
+public bool $readOnly = false;
+```
+
+### Properties used by `DeleteIndexTrait`
+
+- Enable deletion for the model.
+
+```php
+public bool $isDeletable = false;
+```
+
 ---
 
 ## CRUD Controller Override
 
-You can override properties in your controller using getters:
+If you want to add more logic to properties, you can override properties in your controller using getters. For example: you want to return different `$searchExactFields` depending on a condition:
+
+```php
+private function getSearchExactFields(): array
+{
+    if (request('user_type') == 'admin') {
+        return [
+            'admin_id'
+        ];
+    }
+
+    return [
+        'user_id'
+    ];
+}
+```
+
+### Override methods in `CrudIndexTrait`
 
 - Override `$searchSimilarFields`
 
@@ -276,6 +300,23 @@ private function getDefaultOrderByColumns(): ?array;
 ```
 
 ---
+
+## Tests
+
+```sh
+composer test
+```
+
+## Linting
+
+```sh
+composer lint
+```
+
+## Useful links
+
+- https://www.laravelpackage.com/
+- https://github.com/orchestral/testbench
 
 ## Todo
 
