@@ -3,14 +3,14 @@
 namespace Tests;
 
 use Orchestra\Testbench\TestCase as BaseTestCase;
-use Supaapps\Supalara\SupalaraServiceProvider;
+use Supaapps\LaravelApiKit\LaravelApiKitServiceProvider;
 
 class TestCase extends BaseTestCase
 {
     protected function getPackageProviders($app)
     {
         return [
-            SupalaraServiceProvider::class,
+            LaravelApiKitServiceProvider::class,
         ];
     }
 }

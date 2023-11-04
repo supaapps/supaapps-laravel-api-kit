@@ -1,6 +1,6 @@
 <?php
 
-namespace Supaapps\Supalara\Controllers;
+namespace Supaapps\LaravelApiKit\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;

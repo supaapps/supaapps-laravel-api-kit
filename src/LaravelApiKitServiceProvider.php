@@ -1,11 +1,11 @@
 <?php
 
-namespace Supaapps\Supalara;
+namespace Supaapps\LaravelApiKit;
 
 use Illuminate\Support\ServiceProvider;
-use Supaapps\Supalara\Services\ObserversProvider;
+use Supaapps\LaravelApiKit\Services\ObserversProvider;
 
-class SupalaraServiceProvider extends ServiceProvider
+class LaravelApiKitServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any package services.
@@ -14,13 +14,13 @@ class SupalaraServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->publishes([
-            __DIR__ . '/../config/supalara.php' => config_path('supalara.php'),
+            __DIR__ . '/../config/supaapps-laravel-api-kit.php' => config_path('supaapps-laravel-api-kit.php'),
         ]);
     }
 
     public function register()
     {
-        if (config('supalara.audit', false)) {
+        if (config('supaapps-laravel-api-kit.audit', false)) {
             $this->app->register(ObserversProvider::class);
         }
     }

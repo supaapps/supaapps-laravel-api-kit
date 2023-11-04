@@ -1,6 +1,6 @@
 <?php
 
-namespace Supaapps\Supalara\Models\Traits;
+namespace Supaapps\LaravelApiKit\Models\Traits;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
