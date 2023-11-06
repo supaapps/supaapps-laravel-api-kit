@@ -1,6 +1,6 @@
 <?php
 
-namespace Supaapps\Supalara\Controllers\CrudTraits;
+namespace Supaapps\LaravelApiKit\Controllers\CrudTraits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;

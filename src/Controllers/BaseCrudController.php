@@ -1,6 +1,6 @@
 <?php
 
-namespace Supaapps\Supalara\Controllers;
+namespace Supaapps\LaravelApiKit\Controllers;
 
 use Error;
 use Supaapps\Supalara\Exceptions\CrudModelIsNotDefinedException;

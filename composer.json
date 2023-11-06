@@ -1,11 +1,11 @@
 {
-    "name": "supaapps/supalara",
+    "name": "supaapps/supaapps-laravel-api-kit",
     "description": "Boilerplate & Helpers for Supaapps Laravel projects",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Supaapps\\Supalara\\": "src/"
+            "Supaapps\\LaravelApiKit\\": "src/"
         }
     },
     "autoload-dev": {
@@ -35,12 +35,12 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Supaapps\\Supalara\\SupalaraServiceProvider"
+                "Supaapps\\LaravelApiKit\\LaravelApiKitServiceProvider"
             ]
         }
     },
     "scripts": {
         "test": "./vendor/bin/phpunit --testdox",
-        "lint": "./vendor/bin/phpcs src tests config database -vvv"
+        "lint": "./vendor/bin/phpcs src tests config -vvv"
     }
 }

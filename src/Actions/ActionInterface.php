@@ -1,9 +1,8 @@
 <?php
 
-namespace Supaapps\Supalara\Actions;
+namespace Supaapps\LaravelApiKit\Actions;
 
-
-use Supaapps\Supalara\Models\SlActionRecord;
+use Supaapps\LaravelApiKit\Models\SlActionRecord;
 
 interface ActionInterface extends \JsonSerializable
 {

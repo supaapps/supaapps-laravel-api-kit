@@ -1,10 +1,10 @@
 <?php
 
-namespace Supaapps\Supalara\Observers;
+namespace Supaapps\LaravelApiKit\Observers;
 
-use Supaapps\Supalara\Actions\ActionModelCreate;
-use Supaapps\Supalara\Actions\ActionModelDelete;
-use Supaapps\Supalara\Actions\ActionModelUpdate;
+use Supaapps\LaravelApiKit\Actions\ActionModelCreate;
+use Supaapps\LaravelApiKit\Actions\ActionModelDelete;
+use Supaapps\LaravelApiKit\Actions\ActionModelUpdate;
 
 class AuditObserver
 {

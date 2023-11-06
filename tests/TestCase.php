@@ -2,13 +2,13 @@
 
 namespace Tests;
 
-use Illuminate\Database\Schema\Blueprint;
-use Tests\Stubs\SupaLaraExampleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
-use Supaapps\Supalara\SupalaraServiceProvider;
+use Illuminate\Database\Schema\Blueprint;
+use Tests\Stubs\SupaLaraExampleController;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Tests\Stubs\SupaLaraPaginatedExampleController;
+use Supaapps\LaravelApiKit\LaravelApiKitServiceProvider;
 
 class TestCase extends BaseTestCase
 {
@@ -24,7 +24,7 @@ class TestCase extends BaseTestCase
     protected function getPackageProviders($app)
     {
         return [
-            SupalaraServiceProvider::class,
+            LaravelApiKitServiceProvider::class,
         ];
     }
 
