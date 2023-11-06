@@ -92,7 +92,7 @@ class BaseCrudController extends Controller
      */
     public ?array $defaultOrderByColumns = null;
 
-    function __construct()
+    public function __construct()
     {
         try {
             $this->model;

@@ -31,7 +31,7 @@ class TestCase extends BaseTestCase
     private function scaffoldingExampleModel(): void
     {
         // create fake examples table for testing
-        Schema::create('supa_lara_example_models', function(Blueprint $table) {
+        Schema::create('supa_lara_example_models', function (Blueprint $table) {
             $table->id();
             $table->string('label')->nullable();
             $table->timestamps();
