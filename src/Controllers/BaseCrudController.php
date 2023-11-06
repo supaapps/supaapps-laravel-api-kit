@@ -3,7 +3,7 @@
 namespace Supaapps\LaravelApiKit\Controllers;
 
 use Error;
-use Supaapps\Supalara\Exceptions\CrudModelIsNotDefinedException;
+use Supaapps\LaravelApiKit\Exceptions\CrudModelIsNotDefinedException;
 
 class BaseCrudController extends Controller
 {

@@ -2,9 +2,9 @@
 
 namespace Tests\Unit;
 
-use Supaapps\Supalara\Exceptions\CrudModelIsNotDefinedException;
-use Tests\Stubs\FakeCrudController;
 use Tests\TestCase;
+use Tests\Stubs\FakeCrudController;
+use Supaapps\LaravelApiKit\Exceptions\CrudModelIsNotDefinedException;
 
 class BaseCrudControllerTest extends TestCase
 {

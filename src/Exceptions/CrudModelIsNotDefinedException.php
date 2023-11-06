@@ -1,6 +1,6 @@
 <?php
 
-namespace Supaapps\Supalara\Exceptions;
+namespace Supaapps\LaravelApiKit\Exceptions;
 
 use Exception;
 use Symfony\Component\HttpFoundation\Response;

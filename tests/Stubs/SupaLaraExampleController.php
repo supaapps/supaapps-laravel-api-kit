@@ -2,8 +2,8 @@
 
 namespace Tests\Stubs;
 
-use Supaapps\Supalara\Controllers\BaseCrudController;
-use Supaapps\Supalara\Controllers\CrudTraits\AllCrudTraits;
+use Supaapps\LaravelApiKit\Controllers\BaseCrudController;
+use Supaapps\LaravelApiKit\Controllers\CrudTraits\AllCrudTraits;
 
 class SupaLaraExampleController extends BaseCrudController
 {
