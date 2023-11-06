@@ -240,8 +240,8 @@ class CrudIndexTraitTest extends TestCase
         $response->assertOk()
             ->assertJson([
                 ['id' => 2],
-                ['id' => 1],
                 ['id' => 3],
+                ['id' => 1],
             ]);
     }
 }
