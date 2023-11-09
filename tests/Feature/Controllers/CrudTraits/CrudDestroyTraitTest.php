@@ -14,6 +14,7 @@ class CrudDestroyTraitTest extends TestCase
         $response = $this->deleteJson("/non-deletable-example/{$model->id}");
 
         $response->assertUnauthorized();
+        $this->assertModelExists($model);
     }
 
     public function testItCanNotDeleteModelWhenReadOnlyPropertyIsTrue(): void
@@ -23,6 +24,7 @@ class CrudDestroyTraitTest extends TestCase
         $response = $this->deleteJson("/readonly-example/{$model->id}");
 
         $response->assertUnauthorized();
+        $this->assertModelExists($model);
     }
 
     public function testItCanDeleteTheModel(): void

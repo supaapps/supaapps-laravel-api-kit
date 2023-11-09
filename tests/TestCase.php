@@ -49,6 +49,6 @@ class TestCase extends BaseTestCase
         Route::apiResource(
             'readonly-example',
             Controllers\SupaLaraReadonlyExampleController::class
-        )->only('destroy');
+        )->only(['update', 'destroy']);
     }
 }
