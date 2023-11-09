@@ -1,6 +1,6 @@
 <?php
 
-namespace Supaapps\Supalara\Blueprints;
+namespace Supaapps\LaravelApiKit\Blueprints;
 
 use Illuminate\Database\Schema\Blueprint;
 

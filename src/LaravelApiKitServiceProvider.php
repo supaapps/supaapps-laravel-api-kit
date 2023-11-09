@@ -1,12 +1,12 @@
 <?php
 
-namespace Supaapps\Supalara;
+namespace Supaapps\LaravelApiKit;
 
 use Illuminate\Support\ServiceProvider;
+use Supaapps\LaravelApiKit\Services\ObserversProvider;
 use Supaapps\Supalara\Console\Commands\CrudControllerMakeCommand;
-use Supaapps\Supalara\Services\ObserversProvider;
 
-class SupalaraServiceProvider extends ServiceProvider
+class LaravelApiKitServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any package services.
@@ -24,7 +24,7 @@ class SupalaraServiceProvider extends ServiceProvider
 
     public function register()
     {
-        if (config('supalara.audit', false)) {
+        if (config('supaapps-laravel-api-kit.audit', false)) {
             $this->app->register(ObserversProvider::class);
         }
     }

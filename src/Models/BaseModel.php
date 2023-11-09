@@ -1,6 +1,6 @@
 <?php
 
-namespace Supaapps\Supalara\Models;
+namespace Supaapps\LaravelApiKit\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

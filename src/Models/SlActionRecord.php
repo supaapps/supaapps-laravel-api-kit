@@ -1,9 +1,9 @@
 <?php
 
-namespace Supaapps\Supalara\Models;
+namespace Supaapps\LaravelApiKit\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Supaapps\Supalara\Models\Category;
+use Supaapps\LaravelApiKit\Models\Category;
 
 class SlActionRecord extends BaseModel
 {

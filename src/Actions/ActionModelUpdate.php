@@ -1,8 +1,8 @@
 <?php
 
-namespace Supaapps\Supalara\Actions;
+namespace Supaapps\LaravelApiKit\Actions;
 
-use Supaapps\Supalara\Models\SlActionType;
+use Supaapps\LaravelApiKit\Models\SlActionType;
 
 class ActionModelUpdate extends BaseAction
 {

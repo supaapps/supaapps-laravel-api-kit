@@ -1,4 +1,4 @@
-# Supalara <!-- omit in toc -->
+# Supaapps Laravel API Kit <!-- omit in toc -->
 
 Boilerplate and helpers for Supaapps Laravel projects
 
@@ -21,7 +21,7 @@ Boilerplate and helpers for Supaapps Laravel projects
 ## Installation
 
 ```php
-composer require supaapps/supalara
+composer require supaapps/laravel-api-kit
 ```
 
 ## Usage
@@ -31,7 +31,7 @@ composer require supaapps/supalara
 To get advantage of CRUD boilerplate controller, extend `BaseCrudController` in your controller. **Example**:
 
 ```php
-use Supaapps\Supalara\Controllers\BaseCrudController;
+use Supaapps\LaravelApiKit\Controllers\BaseCrudController;
 
 class ExampleController extends BaseCrudController
 {
