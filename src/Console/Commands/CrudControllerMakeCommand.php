@@ -2,9 +2,11 @@
 
 namespace Supaapps\LaravelApiKit\Console\Commands;
 
+use Illuminate\Database\SQLiteConnection;
 use Illuminate\Routing\Console\ControllerMakeCommand;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -308,8 +310,26 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
     {
         $modelClass = $this->parseModel($this->argument('model'));
 
-        if (class_exists($modelClass)) {
-            $table = app($modelClass)->getTable();
+        if (!class_exists($modelClass)) {
+            return;
+        }
+
+        $table = app($modelClass)->getTable();
+
+        if (Schema::getConnection() instanceof SQLiteConnection) {
+            $columns = DB::select("PRAGMA table_info([{$table}]);");
+            $this->tableColumns = Arr::pluck($columns, 'name');
+
+            $this->tableDateColumns = Arr::pluck(array_filter(
+                $columns,
+                fn (object $column) => in_array($column->type, ['date', 'datetime', 'timestamp'])
+            ), 'name');
+
+            $this->tableNullableColumns = Arr::pluck(array_filter(
+                $columns,
+                fn (object $column) => $column->notnull === 0
+            ), 'name');
+        } else {
             $columns = DB::select("describe {$table}");
             $this->tableColumns = Arr::pluck($columns, 'Field');
 
@@ -322,9 +342,9 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
                 $columns,
                 fn (object $column) => $column->Null === 'YES'
             ), 'Field');
-
-            $this->tableNonDateColumns = array_diff($this->tableColumns, $this->tableDateColumns);
         }
+
+        $this->tableNonDateColumns = array_diff($this->tableColumns, $this->tableDateColumns);
     }
 
     protected function promptForMissingArgumentsUsing()
