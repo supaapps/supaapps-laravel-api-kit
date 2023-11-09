@@ -9,7 +9,8 @@ use Supaapps\LaravelApiKit\Controllers\CrudTraits\CrudDestroyTrait;
 
 class SupaLaraReadonlyExampleController extends BaseCrudController
 {
-    use CrudDestroyTrait, CrudUpdateTrait;
+    use CrudDestroyTrait;
+    use CrudUpdateTrait;
 
     public string $model = SupaLaraExampleModel::class;
 
