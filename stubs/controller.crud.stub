@@ -3,7 +3,7 @@
 namespace {{ namespace }};
 
 use {{ namespacedModel }};
-use Supaapps\Supalara\Controllers\BaseCrudController;
+use Supaapps\LaravelApiKit\Controllers\BaseCrudController;
 
 class {{ class }} extends BaseCrudController
 {

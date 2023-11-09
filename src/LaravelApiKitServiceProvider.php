@@ -4,7 +4,7 @@ namespace Supaapps\LaravelApiKit;
 
 use Illuminate\Support\ServiceProvider;
 use Supaapps\LaravelApiKit\Services\ObserversProvider;
-use Supaapps\Supalara\Console\Commands\CrudControllerMakeCommand;
+use Supaapps\LaravelApiKit\Console\Commands\CrudControllerMakeCommand;
 
 class LaravelApiKitServiceProvider extends ServiceProvider
 {
@@ -14,9 +14,10 @@ class LaravelApiKitServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if ($this->app->runningInConsole()) {
-            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
             $this->publishes([
-                __DIR__.'/../config/supalara.php' => config_path('supalara.php'),
+                __DIR__ . '/../config/supaapps-laravel-api-kit.php'
+                    => config_path('supaapps-laravel-api-kit.php'),
             ]);
             $this->registerCommands();
         }

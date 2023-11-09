@@ -1,6 +1,6 @@
 <?php
 
-namespace Supaapps\Supalara\Console\Commands;
+namespace Supaapps\LaravelApiKit\Console\Commands;
 
 use Illuminate\Routing\Console\ControllerMakeCommand;
 use Illuminate\Support\Arr;
@@ -71,7 +71,10 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
     {
         $modelClass = $this->parseModel($this->argument('model'));
 
-        if (! class_exists($modelClass) && confirm("A {$modelClass} model does not exist. Do you want to generate it?", default: true)) {
+        if (
+            !class_exists($modelClass) &&
+            confirm("A {$modelClass} model does not exist. Do you want to generate it?", true)
+        ) {
             $this->call('make:model', ['name' => $modelClass]);
         }
 
@@ -124,17 +127,72 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
     protected function getOptions()
     {
         return [
-            ['shouldPaginate', null, InputOption::VALUE_OPTIONAL, 'Indicates the index should return paginated response', false],
-            ['isDeletable', null, InputOption::VALUE_OPTIONAL, 'The model can be deleted', false],
-            ['readOnly', null, InputOption::VALUE_OPTIONAL, 'The model is for read only', false],
-            ['searchField', null, InputOption::VALUE_OPTIONAL, 'Search by single column', null],
-            ['searchSimilarFields', null, InputOption::VALUE_OPTIONAL, 'Look for similar values in given columns', []],
-            ['searchExactFields', null, InputOption::VALUE_OPTIONAL, 'Look for exact values in given columns', []],
-            ['searchDateFields', null, InputOption::VALUE_OPTIONAL, 'Look for exact dates in given columns', []],
-            ['filters', null, InputOption::VALUE_OPTIONAL, 'Look for exact filters in given columns', []],
-            ['dateFilters', null, InputOption::VALUE_OPTIONAL, 'Look for date range for given columns', []],
-            ['isEmptyFilters', null, InputOption::VALUE_OPTIONAL, 'Filter null/not null columns', []],
-            ['defaultOrderByColumns', null, InputOption::VALUE_OPTIONAL, 'Default order column', null],
+            [
+                'shouldPaginate',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Indicates the index should return paginated response',
+                false
+            ],
+            [
+                'isDeletable',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'The model can be deleted',
+                false
+            ], [
+                'readOnly',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'The model is for read only',
+                false
+            ], [
+                'searchField',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Search by single column',
+                null
+            ], [
+                'searchSimilarFields',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Look for similar values in given columns',
+                []
+            ], [
+                'searchExactFields',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Look for exact values in given columns',
+                []
+            ], [
+                'searchDateFields',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Look for exact dates in given columns',
+                []
+            ], [
+                'filters',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Look for exact filters in given columns',
+                []
+            ], [
+                'dateFilters',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Look for date range for given columns',
+                []
+            ], [
+                'isEmptyFilters',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Filter null/not null columns',
+                []
+            ], [
+                'defaultOrderByColumns',
+                null,
+                InputOption::VALUE_OPTIONAL, 'Default order column', null
+            ]
         ];
     }
 
@@ -160,7 +218,7 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         if (
             is_null($this->option('searchField')) &&
             !empty($this->tableColumns) &&
-            confirm("Do yo want to search by single column?", false)
+            confirm('Do yo want to search by single column?', false)
         ) {
             $input->setOption('searchField', select(
                 'Select column to search with:',
@@ -171,7 +229,7 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         if (
             empty($this->option('searchSimilarFields')) &&
             !empty($this->tableNonDateColumns) &&
-            confirm("Do yo want to search for similar values in some columns?", false)
+            confirm('Do yo want to search for similar values in some columns?', false)
         ) {
             $input->setOption('searchSimilarFields', multiselect(
                 'Select columns to search for similar values:',
@@ -182,7 +240,7 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         if (
             empty($this->option('searchExactFields')) &&
             !empty($this->tableNonDateColumns) &&
-            confirm("Do yo want to search for exact values in some columns?", false)
+            confirm('Do yo want to search for exact values in some columns?', false)
         ) {
             $input->setOption('searchExactFields', multiselect(
                 'Select columns to search for exact values:',
@@ -193,7 +251,7 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         if (
             empty($this->option('searchDateFields')) &&
             !empty($this->tableDateColumns) &&
-            confirm("Do yo want to search for exact dates?", false)
+            confirm('Do yo want to search for exact dates?', false)
         ) {
             $input->setOption('searchDateFields', multiselect(
                 'Select columns to search for date values:',
@@ -204,7 +262,7 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         if (
             empty($this->option('filters')) &&
             !empty($this->tableNonDateColumns) &&
-            confirm("Do you want to enable filters for columns?", false)
+            confirm('Do you want to enable filters for columns?', false)
         ) {
             $input->setOption('filters', multiselect(
                 'Enable filters for selected columns:',
@@ -215,7 +273,7 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         if (
             empty($this->option('dateFilters')) &&
             !empty($this->tableDateColumns) &&
-            confirm("Do you want to enable date filters?", false)
+            confirm('Do you want to enable date filters?', false)
         ) {
             $input->setOption('dateFilters', multiselect(
                 'Enable dateFilters for selected columns:',
@@ -226,7 +284,7 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         if (
             empty($this->option('isEmptyFilters')) &&
             !empty($this->tableNullableColumns) &&
-            confirm("Filter by null/not null columns?", false)
+            confirm('Filter by null/not null columns?', false)
         ) {
             $input->setOption('isEmptyFilters', multiselect(
                 'Filter null/not null for selected columns:',
@@ -237,7 +295,7 @@ class CrudControllerMakeCommand extends ControllerMakeCommand
         if (
             empty($this->option('defaultOrderByColumns')) &&
             !empty($this->tableColumns) &&
-            confirm("Do you want to order by default columns?", false)
+            confirm('Do you want to order by default columns?', false)
         ) {
             $column = select('Select columns to order by default:', $this->tableColumns);
             $sort = select('Sort order (asc/desc):', ['asc', 'desc'], 'asc');
