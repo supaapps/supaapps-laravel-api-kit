@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests\Stubs;
+namespace Tests\Stubs\Controllers;
 
+use Tests\Stubs\SupaLaraExampleModel;
 use Supaapps\LaravelApiKit\Controllers\BaseCrudController;
 use Supaapps\LaravelApiKit\Controllers\CrudTraits\AllCrudTraits;
 

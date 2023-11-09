@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests\Stubs;
+namespace Tests\Stubs\Controllers;
 
+use Tests\Stubs\SupaLaraExampleModel;
 use Supaapps\LaravelApiKit\Controllers\BaseCrudController;
 use Supaapps\LaravelApiKit\Controllers\CrudTraits\AllCrudTraits;
 
@@ -10,6 +11,8 @@ class SupaLaraExampleController extends BaseCrudController
     use AllCrudTraits;
 
     public string $model = SupaLaraExampleModel::class;
+
+    public bool $isDeletable = true;
 
     public array $searchSimilarFields = [
         'label',

@@ -2,12 +2,11 @@
 
 namespace Tests;
 
+use Tests\Stubs\Controllers;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use Tests\Stubs\SupaLaraExampleController;
 use Orchestra\Testbench\TestCase as BaseTestCase;
-use Tests\Stubs\SupaLaraPaginatedExampleController;
 use Supaapps\LaravelApiKit\LaravelApiKitServiceProvider;
 
 class TestCase extends BaseTestCase
@@ -38,7 +37,18 @@ class TestCase extends BaseTestCase
         });
 
         // register curd example routes
-        Route::apiResource('examples', SupaLaraExampleController::class);
-        Route::get('paginated-examples', [SupaLaraPaginatedExampleController::class, 'index']);
+        Route::apiResource('examples', Controllers\SupaLaraExampleController::class);
+        Route::get('paginated-examples', [
+            Controllers\SupaLaraPaginatedExampleController::class,
+            'index'
+        ]);
+        Route::apiResource(
+            'non-deletable-example',
+            Controllers\SupaLaraNonDeletableExampleController::class
+        )->only('destroy');
+        Route::apiResource(
+            'readonly-example',
+            Controllers\SupaLaraReadonlyExampleController::class
+        )->only('destroy');
     }
 }
