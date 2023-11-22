@@ -16,7 +16,6 @@ Boilerplate and helpers for Supaapps Laravel projects
 - [Tests](#tests)
 - [Linting](#linting)
 - [Useful links](#useful-links)
-- [Todo](#todo)
 
 ## Installation
 
@@ -317,11 +316,3 @@ composer lint
 
 - https://www.laravelpackage.com/
 - https://github.com/orchestral/testbench
-
-## Todo
-
-- [X] Add Basic CRUD functions
-- [X] Add Basic audit & observers
-- [ ] Tests for CRUD
-- [ ] Tests for Audit
-- [ ] Publish Dockerfile
