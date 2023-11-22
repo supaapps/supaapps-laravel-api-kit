@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Stubs;
+namespace Tests\Stubs\Controllers;
 
 use Supaapps\LaravelApiKit\Controllers\BaseCrudController;
 use Supaapps\LaravelApiKit\Controllers\CrudTraits\CrudIndexTrait;

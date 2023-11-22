@@ -221,13 +221,17 @@ class CrudIndexTraitTest extends TestCase
     public function testItSortsByGivenColumns()
     {
         $this->travel(1)->minute();
-        SupaLaraExampleModel::factory()->create();
-        SupaLaraExampleModel::factory()->create([
+        SupaLaraExampleModel::factory()->create([ // 1
+            'label' => 'A'
+        ]);
+        SupaLaraExampleModel::factory()->create([ // 2
             'label' => null,
         ]);
         $this->travelBack();
 
-        SupaLaraExampleModel::factory()->create();
+        SupaLaraExampleModel::factory()->create([ // 3
+            'label' => 'B'
+        ]);
 
         $query = http_build_query([
             'sort' => [
@@ -240,8 +244,8 @@ class CrudIndexTraitTest extends TestCase
         $response->assertOk()
             ->assertJson([
                 ['id' => 2],
-                ['id' => 3],
                 ['id' => 1],
+                ['id' => 3],
             ]);
     }
 }
