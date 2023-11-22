@@ -25,7 +25,8 @@
         "illuminate/support": "^10.18",
         "illuminate/http": "^10.18",
         "illuminate/database": "^10.18",
-        "laravel/framework": "^10.18"
+        "laravel/framework": "^10.18",
+        "jfcherng/php-diff": "^6.15"
     },
     "require-dev": {
         "orchestra/testbench": "^8.0",

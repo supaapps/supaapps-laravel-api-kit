@@ -7,6 +7,7 @@ use Illuminate\Encryption\Encrypter;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Jfcherng\Diff\DiffHelper;
 
 use function Laravel\Prompts\confirm;
 
@@ -32,15 +33,40 @@ class InitLaravelApiKit extends Command
             ->publishEnv();
     }
 
-    private function publishDockerFile(): self
+    private function replaceFileWithContent(string $filePath, string $newContent): void
     {
-        if (
-            File::exists(base_path('Dockerfile')) &&
-            !confirm('Dockerfile exists. Do you want to override it ?', false)
-        ) {
-            return $this;
+        if (!File::exists($filePath)) {
+            return;
         }
 
+        $fileName = pathinfo($filePath, PATHINFO_FILENAME);
+        $result = DiffHelper::calculate(
+            File::get($filePath),
+            $newContent,
+            'Unified',
+            [
+                'context' => 0
+            ]
+        );
+
+        if (strlen($result) < 1) {
+            $this->info("Old `{$fileName}` is identical. Proceeding...");
+
+            return;
+        }
+
+        $this->warn('⚠️ There are changes between the 2 files:');
+        $this->comment(rtrim($result));
+
+        if (confirm('Do you want to replace changes ?', false)) {
+            File::put($filePath, $newContent);
+            dump(str_replace(app_path(), '', $filePath));
+            $this->info("`{$filePath}` was generated");
+        }
+    }
+
+    private function publishDockerFile(): self
+    {
         $content = File::get(__DIR__ . '/../../../stubs/Dockerfile.stub');
         $content = str_replace([
             '{{ imageVersion }}',
@@ -50,21 +76,13 @@ class InitLaravelApiKit extends Command
             $this->gitRepo,
         ], $content);
 
-        File::put(base_path('Dockerfile'), $content);
-        $this->info('`Dockerfile` was generated');
+        $this->replaceFileWithContent(base_path('Dockerfile'), $content);
 
         return $this;
     }
 
     private function publishStartupScript(): self
     {
-        if (
-            File::exists(base_path('docker/startup.sh')) &&
-            !confirm('`docker/startup.sh` exists. Do you want to override it ?', false)
-        ) {
-            return $this;
-        }
-
         if (!File::exists(base_path('docker'))) {
             File::makeDirectory(base_path('docker'));
         }
@@ -73,8 +91,7 @@ class InitLaravelApiKit extends Command
             'https://raw.githubusercontent.com/supaapps/docker-laravel/main/example/docker/startup.sh'
         )->body();
 
-        File::put(base_path('docker/startup.sh'), $content);
-        $this->info('docker/startup.sh script was created successfully');
+        $this->replaceFileWithContent(base_path('docker/startup.sh'), $content);
 
         return $this;
     }
@@ -210,8 +227,8 @@ YML;
             $appKey,
             $this->ask('What is app url ?', 'http://localhost'),
             $dbHost,
-            $this->dbName ?? $this->ask("Enter database name", Str::random()),
-            $this->dbPassword ?? $this->ask("Enter database password", Str::random()),
+            $this->dbName ?? $this->ask('Enter database name', Str::random()),
+            $this->dbPassword ?? $this->ask('Enter database password', Str::random()),
         ], $content);
 
         File::put(base_path('.env'), $content);
