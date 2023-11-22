@@ -317,6 +317,7 @@ composer lint
 
 - https://www.laravelpackage.com/
 - https://github.com/orchestral/testbench
+- https://github.com/jfcherng/php-diff
 
 ## Todo
 
