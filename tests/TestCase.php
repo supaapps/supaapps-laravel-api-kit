@@ -41,8 +41,7 @@ class TestCase extends BaseTestCase
         Schema::create('supa_lara_example_models', function (Blueprint $table) {
             $table->id();
             $table->string('label')->nullable();
-            $table->unsignedBigInteger('created_by_id')->nullable();
-            $table->unsignedBigInteger('updated_by_id')->nullable();
+            $table->auditIds('supa_lara_user_models');
             $table->timestamps();
         });
 
