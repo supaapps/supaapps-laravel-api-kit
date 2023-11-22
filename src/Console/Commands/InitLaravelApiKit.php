@@ -33,10 +33,10 @@ class InitLaravelApiKit extends Command
             ->publishEnv();
     }
 
-    private function replaceFileWithContent(string $filePath, string $newContent): void
+    private function replaceFileWithContent(string $filePath, string $newContent): self
     {
         if (!File::exists($filePath)) {
-            return;
+            return $this;
         }
 
         $fileName = pathinfo($filePath, PATHINFO_FILENAME);
@@ -52,7 +52,7 @@ class InitLaravelApiKit extends Command
         if (strlen($result) < 1) {
             $this->info("Old `{$fileName}` is identical. Proceeding...");
 
-            return;
+            return $this;
         }
 
         $this->warn('⚠️ There are changes between the 2 files:');
@@ -60,9 +60,10 @@ class InitLaravelApiKit extends Command
 
         if (confirm('Do you want to replace changes ?', false)) {
             File::put($filePath, $newContent);
-            dump(str_replace(app_path(), '', $filePath));
             $this->info("`{$filePath}` was generated");
         }
+
+        return $this;
     }
 
     private function publishDockerFile(): self
@@ -76,9 +77,10 @@ class InitLaravelApiKit extends Command
             $this->gitRepo,
         ], $content);
 
-        $this->replaceFileWithContent(base_path('Dockerfile'), $content);
-
-        return $this;
+        return $this->replaceFileWithContent(
+            base_path('Dockerfile'),
+            $content
+        );
     }
 
     private function publishStartupScript(): self
@@ -91,20 +93,14 @@ class InitLaravelApiKit extends Command
             'https://raw.githubusercontent.com/supaapps/docker-laravel/main/example/docker/startup.sh'
         )->body();
 
-        $this->replaceFileWithContent(base_path('docker/startup.sh'), $content);
-
-        return $this;
+        return $this->replaceFileWithContent(
+            base_path('docker/startup.sh'),
+            $content
+        );
     }
 
     private function createDockerCompose(): self
     {
-        if (
-            File::exists(base_path('docker-compose.yml')) &&
-            !confirm('`docker-compose.yml` exists. Do you want to override it ?', false)
-        ) {
-            return $this;
-        }
-
         $content = <<<YML
 version: '3.9'
 services:
@@ -192,21 +188,14 @@ YML;
 YML;
         }
 
-        File::put(base_path('docker-compose.yml'), $content);
-        $this->info('docker-compose.yml script was created successfully');
-
-        return $this;
+        return $this->replaceFileWithContent(
+            base_path('docker-compose.yml'),
+            $content
+        );
     }
 
     public function publishEnv(): self
     {
-        if (
-            File::exists(base_path('.env')) &&
-            !confirm('.env exists. Do you want to override it ?', false)
-        ) {
-            return $this;
-        }
-
         $appKey = 'base64:' . base64_encode(
             Encrypter::generateKey($this->laravel['config']['app.cipher'])
         );
@@ -231,9 +220,9 @@ YML;
             $this->dbPassword ?? $this->ask('Enter database password', Str::random()),
         ], $content);
 
-        File::put(base_path('.env'), $content);
-        $this->info('`.env` was generated');
-
-        return $this;
+        return $this->replaceFileWithContent(
+            base_path('.env'),
+            $content
+        );
     }
 }
