@@ -4,6 +4,9 @@ namespace Supaapps\LaravelApiKit\Blueprints;
 
 use Illuminate\Database\Schema\Blueprint;
 
+/**
+ * @deprecated version
+ */
 class SlSchemaBlueprint extends Blueprint
 {
     public function auditIds()
