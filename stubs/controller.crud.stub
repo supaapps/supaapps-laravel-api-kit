@@ -1,0 +1,33 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ namespacedModel }};
+use Supaapps\LaravelApiKit\Controllers\BaseCrudController;
+
+class {{ class }} extends BaseCrudController
+{
+    public string $model = {{ model }}::class;
+
+    public bool $shouldPaginate = {{ shouldPaginate }};
+
+    public bool $isDeletable = {{ isDeletable }};
+
+    public bool $readOnly = {{ readOnly }};
+
+    public ?string $searchField = {{ searchField }};
+
+    public array $searchSimilarFields = {{ searchSimilarFields }};
+
+    public array $searchExactFields = {{ searchExactFields }};
+
+    public array $searchDateFields = {{ searchDateFields }};
+
+    public array $filters = {{ filters }};
+
+    public array $dateFilters = {{ dateFilters }};
+
+    public ?array $isEmptyFilters = {{ isEmptyFilters }};
+
+    public ?array $defaultOrderByColumns = {{ defaultOrderByColumns }};
+}
