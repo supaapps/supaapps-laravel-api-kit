@@ -1,0 +1,12 @@
+FROM ghcr.io/supaapps/docker-laravel:{{ imageVersion }}
+LABEL org.opencontainers.image.source={{ gitRepo }}
+
+WORKDIR /var/www
+ADD . /var/www
+
+EXPOSE 80
+
+ADD docker/startup.sh /docker
+RUN chmod +x /docker/startup.sh
+
+ENTRYPOINT ["/docker/startup.sh"]

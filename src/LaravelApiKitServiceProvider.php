@@ -4,6 +4,7 @@ namespace Supaapps\LaravelApiKit;
 
 use Illuminate\Support\ServiceProvider;
 use Supaapps\LaravelApiKit\Services\ObserversProvider;
+use Supaapps\LaravelApiKit\Console\Commands\InitLaravelApiKit;
 use Supaapps\LaravelApiKit\Console\Commands\CrudControllerMakeCommand;
 
 class LaravelApiKitServiceProvider extends ServiceProvider
@@ -33,6 +34,7 @@ class LaravelApiKitServiceProvider extends ServiceProvider
     private function registerCommands(): void
     {
         $this->commands([
+            InitLaravelApiKit::class,
             CrudControllerMakeCommand::class,
         ]);
     }

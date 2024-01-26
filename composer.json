@@ -26,6 +26,7 @@
         "illuminate/http": "^10.18",
         "illuminate/database": "^10.18",
         "laravel/framework": "^10.18",
+        "jfcherng/php-diff": "^6.15"
         "symfony/var-exporter": "^6.3"
     },
     "require-dev": {
