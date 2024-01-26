@@ -22,7 +22,7 @@ Boilerplate and helpers for Supaapps Laravel projects
 ## Installation
 
 ```php
-composer require supaapps/laravel-api-kit
+composer require supaapps/supaapps-laravel-api-kit
 ```
 
 ## Usage
