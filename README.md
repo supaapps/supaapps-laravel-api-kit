@@ -14,10 +14,10 @@ Boilerplate and helpers for Supaapps Laravel projects
   - [Properties used by `DeleteIndexTrait`](#properties-used-by-deleteindextrait)
 - [CRUD Controller Override](#crud-controller-override)
   - [Override methods in `CrudIndexTrait`](#override-methods-in-crudindextrait)
+- [User signature](#user-signature)
 - [Tests](#tests)
 - [Linting](#linting)
 - [Useful links](#useful-links)
-- [Todo](#todo)
 
 ## Installation
 
@@ -310,6 +310,48 @@ private function getDefaultOrderByColumns(): ?array;
 
 ---
 
+## User signature
+
+You can keep track of `created` and `updated` user of your model in 3 steps:
+
+1. Include required columns to your model `schema`
+
+```php
+Schema::table('articles', function (Blueprint $table) {
+    $table->auditIds();
+});
+```
+
+Where `auditIds` accepts 2 parameters
+
+- `table`: the related table name, default: `users`
+- `column`: the related column name on related table, default `id`
+
+2. Include custom columns to your model `$fillable` property
+
+```php
+protected $fillable = [
+    'created_by_id',
+    'updated_by_id',
+    ...
+]
+```
+
+3. Add observer to your model
+
+```php
+// in src/Providers/EventServiceProvider.php add the following line
+
+protected $observers = [
+    \App\Models\Article::class => [ // replace Article with your model
+        \Supaapps\LaravelApiKit\Observers\UserSignatureObserver::class,
+    ],
+    ...
+];
+```
+
+---
+
 ## Tests
 
 ```sh
@@ -327,11 +369,3 @@ composer lint
 - https://www.laravelpackage.com/
 - https://github.com/orchestral/testbench
 - https://github.com/jfcherng/php-diff
-
-## Todo
-
-- [X] Add Basic CRUD functions
-- [X] Add Basic audit & observers
-- [ ] Tests for CRUD
-- [ ] Tests for Audit
-- [ ] Publish Dockerfile
