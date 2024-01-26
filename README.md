@@ -6,6 +6,7 @@ Boilerplate and helpers for Supaapps Laravel projects
 
 - [Installation](#installation)
 - [Usage](#usage)
+  - [Generate CRUD controller](#generate-crud-controller)
   - [CRUD](#crud)
   - [Available CRUD properties](#available-crud-properties)
   - [Properties used by `CrudIndexTrait`](#properties-used-by-crudindextrait)
@@ -25,6 +26,14 @@ composer require supaapps/laravel-api-kit
 ```
 
 ## Usage
+
+### Generate CRUD controller
+
+To create crud controller, run the following command:
+
+```sh
+php artisan make:crud-controller
+```
 
 ### CRUD
 
