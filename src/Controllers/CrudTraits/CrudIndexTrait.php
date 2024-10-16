@@ -8,9 +8,11 @@ use Illuminate\Support\Str;
 
 trait CrudIndexTrait
 {
+    use QueryBuilding;
+
     public function indexQueryBuilder(Request $request): Builder
     {
-        $query = $this->model::query();
+        $query = $this->queryBuilder();
 
         if (!is_null($this->searchField) && $request->has('search')) {
             $query->where($this->searchField, 'LIKE', '%' . $request->get('search') . '%');

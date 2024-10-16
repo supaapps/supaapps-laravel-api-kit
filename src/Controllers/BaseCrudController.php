@@ -92,6 +92,13 @@ class BaseCrudController extends Controller
      */
     public ?array $defaultOrderByColumns = null;
 
+    /**
+     * Add with query relation
+     *
+     * @var array
+     */
+    public array $with = [];
+
     public function __construct()
     {
         try {
