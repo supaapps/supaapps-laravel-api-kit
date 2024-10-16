@@ -2,12 +2,13 @@
 
 namespace Supaapps\LaravelApiKit\Controllers\CrudTraits;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 trait CrudIndexTrait
 {
-    public function index(Request $request)
+    public function indexQueryBuilder(Request $request): Builder
     {
         $query = $this->model::query();
 
@@ -83,10 +84,17 @@ trait CrudIndexTrait
             }
         }
 
+        return $query;
+    }
+
+    public function index(Request $request)
+    {
         if ($this->shouldPaginate) {
-            return $query->paginate($request->get('per_page', 50));
+            return $this->indexQueryBuilder($request)
+                ->paginate($request->get('per_page', 50));
         } else {
-            return $query->get();
+            return $this->indexQueryBuilder($request)
+                ->get();
         }
     }
 
