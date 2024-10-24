@@ -2,12 +2,13 @@
 
 namespace Supaapps\LaravelApiKit\Controllers\CrudTraits;
 
-use Illuminate\Http\Request;
-
 trait CrudShowTrait
 {
-    public function show($id)
+    use QueryBuilding;
+
+    public function show(mixed $id)
     {
-        return $this->model::findOrFail($id);
+        return $this->queryBuilder()
+            ->findOrFail($id);
     }
 }
