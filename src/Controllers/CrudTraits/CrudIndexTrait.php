@@ -39,12 +39,19 @@ trait CrudIndexTrait
             }
         });
 
-        // FILTER BY COLUMNS -------------------
+        // FILTER BY COLUMNS (Detect Single vs Array Automatically) --------------
         foreach ($this->getFilters() as $key) {
             if ($request->has($key)) {
-                $query->whereIn(Str::singular($key), $request->get($key));
+                $value = $request->get($key);
+
+                if (is_array($value)) {
+                    $query->whereIn(Str::singular($key), $value);
+                } else {
+                    $query->where(Str::singular($key), $value);
+                }
             }
         }
+
 
         // FILTER BY DATES ---------------------
         foreach ($this->getDateFilters() as $key) {
