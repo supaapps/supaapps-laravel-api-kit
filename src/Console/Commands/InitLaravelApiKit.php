@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Encryption\Encrypter;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Http;
+use Supaapps\LaravelApiKit\Support\ContainerImages;
 use Jfcherng\Diff\DiffHelper;
 
 use function Laravel\Prompts\confirm;
@@ -36,6 +36,8 @@ class InitLaravelApiKit extends Command
     private function replaceFileWithContent(string $filePath, string $newContent): self
     {
         if (!File::exists($filePath)) {
+            File::put($filePath, $newContent);
+            $this->info("`{$filePath}` was generated");
             return $this;
         }
 
@@ -69,13 +71,21 @@ class InitLaravelApiKit extends Command
     private function publishDockerFile(): self
     {
         $content = File::get(__DIR__ . '/../../../stubs/Dockerfile.stub');
+        $images = ContainerImages::forBranch($this->choice('PHP branch', ['8.4', '8.3', '8.2'], 0));
         $content = str_replace([
-            '{{ imageVersion }}',
+            '{{ buildImage }}',
+            '{{ runtimeImage }}',
             '{{ gitRepo }}',
         ], [
-            $this->ask('Enter desired image version', 'v2.1'),
+            $images['build'],
+            $images['runtime'],
             $this->gitRepo,
         ], $content);
+
+        $this->replaceFileWithContent(
+            base_path('.dockerignore'),
+            File::get(__DIR__ . '/../../../stubs/.dockerignore.stub')
+        );
 
         return $this->replaceFileWithContent(
             base_path('Dockerfile'),
@@ -89,9 +99,7 @@ class InitLaravelApiKit extends Command
             File::makeDirectory(base_path('docker'));
         }
 
-        $content = Http::get(
-            'https://raw.githubusercontent.com/supaapps/docker-laravel/main/example/docker/startup.sh'
-        )->body();
+        $content = File::get(__DIR__ . '/../../../stubs/startup.sh.stub');
 
         return $this->replaceFileWithContent(
             base_path('docker/startup.sh'),
@@ -180,7 +188,7 @@ YML;
     cron:
         build:
             context: .
-        entrypoint: "cron -f -l"
+        entrypoint: ["php", "/var/www/artisan", "schedule:work", "--no-interaction"]
         volumes:
             - ./:/var/www
         depends_on:
